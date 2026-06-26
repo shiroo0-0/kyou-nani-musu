@@ -1,5 +1,7 @@
-// きょうなに蒸す？ Ver.3
+// きょうなに蒸す？ 栄養・薬膳見直し版 data.js
+// スーパーで買いやすい食材に整理
 // 🩵 美容モード / 🌿 薬膳モード / 🥦 食材図鑑 / 🫚 薬味・たれ提案
+// 注意：医療的効能の断定ではなく、一般的な栄養学・薬膳の考え方をもとにしたアプリ用分類です。
 
 const BEAUTY_GOALS = {
   "美肌": "ハリ・ツヤを意識したい日",
@@ -35,10 +37,17 @@ const INGREDIENTS = [
     "season": "通年",
     "beautyMain": "ダイエット",
     "beautySub": "美肌",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "高タンパク・低脂質で、肌や髪の材料を補いやすい定番。",
-    "steamTime": "10〜15分"
+    "yakuzenMain": "疲労回復",
+    "yakuzenSub": "胃腸ケア",
+    "memo": "高タンパク・低脂質で、軽めに整えたい日に使いやすい定番食材。",
+    "steamTime": "12〜15分",
+    "nutrition": [
+      "たんぱく質",
+      "ビタミンB6"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "たんぱく質、ビタミンB6を含む食材。薬膳では平性寄りとして扱い、疲労回復を意識したい日に取り入れやすい。"
   },
   {
     "name": "鶏もも肉",
@@ -46,10 +55,18 @@ const INGREDIENTS = [
     "season": "通年",
     "beautyMain": "疲労回復",
     "beautySub": "美肌",
-    "yakuzenMain": "冷え改善",
-    "yakuzenSub": "疲労回復",
-    "memo": "満足感を出したい日に向く。",
-    "steamTime": "10〜15分"
+    "yakuzenMain": "疲労回復",
+    "yakuzenSub": "冷え改善",
+    "memo": "ジューシーで満足感が出やすい。野菜と一緒に蒸すと食べやすい。",
+    "steamTime": "15〜18分",
+    "nutrition": [
+      "たんぱく質",
+      "脂質",
+      "ビタミンB群"
+    ],
+    "property": "温性",
+    "taste": "甘",
+    "reviewNote": "たんぱく質、脂質、ビタミンB群を含む食材。薬膳では温性寄りとして扱い、疲労回復を意識したい日に取り入れやすい。"
   },
   {
     "name": "ささみ",
@@ -59,30 +76,15 @@ const INGREDIENTS = [
     "beautySub": "肌荒れ",
     "yakuzenMain": "胃腸ケア",
     "yakuzenSub": "疲労回復",
-    "memo": "低脂質で軽めに食べたい日に使いやすい。",
-    "steamTime": "10〜15分"
-  },
-  {
-    "name": "手羽元",
-    "category": "タンパク質",
-    "season": "通年",
-    "beautyMain": "美肌",
-    "beautySub": "疲労回復",
-    "yakuzenMain": "冷え改善",
-    "yakuzenSub": "疲労回復",
-    "memo": "骨付きで満足感が出やすい。",
-    "steamTime": "18〜25分"
-  },
-  {
-    "name": "手羽先",
-    "category": "タンパク質",
-    "season": "通年",
-    "beautyMain": "美肌",
-    "beautySub": "疲労回復",
-    "yakuzenMain": "冷え改善",
-    "yakuzenSub": "疲労回復",
-    "memo": "コクがあり、満足感を足したい日に。",
-    "steamTime": "18〜25分"
+    "memo": "低脂質であっさり。肌や体づくりを意識したい日に。",
+    "steamTime": "10〜12分",
+    "nutrition": [
+      "たんぱく質",
+      "ビタミンB6"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "たんぱく質、ビタミンB6を含む食材。薬膳では平性寄りとして扱い、胃腸ケアを意識したい日に取り入れやすい。"
   },
   {
     "name": "豚ロース",
@@ -91,9 +93,35 @@ const INGREDIENTS = [
     "beautyMain": "疲労回復",
     "beautySub": "ダイエット",
     "yakuzenMain": "疲労回復",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "ビタミンB群を意識したい日に。",
-    "steamTime": "10〜15分"
+    "yakuzenSub": "冷え改善",
+    "memo": "ビタミンB群を意識したい日に。食べごたえも出しやすい。",
+    "steamTime": "12〜15分",
+    "nutrition": [
+      "たんぱく質",
+      "ビタミンB1"
+    ],
+    "property": "平性",
+    "taste": "甘・鹹",
+    "reviewNote": "たんぱく質、ビタミンB1を含む食材。薬膳では平性寄りとして扱い、疲労回復を意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "豚バラ",
+    "category": "タンパク質",
+    "season": "通年",
+    "beautyMain": "疲労回復",
+    "beautySub": "おまかせ",
+    "yakuzenMain": "疲労回復",
+    "yakuzenSub": "おまかせ",
+    "memo": "脂のうま味で野菜がおいしくなる。少量使いがおすすめ。",
+    "steamTime": "10〜12分",
+    "nutrition": [
+      "たんぱく質",
+      "脂質",
+      "ビタミンB1"
+    ],
+    "property": "平性",
+    "taste": "甘・鹹",
+    "reviewNote": "たんぱく質、脂質、ビタミンB1を含む食材。薬膳では平性寄りとして扱い、疲労回復を意識したい日に取り入れやすい。"
   },
   {
     "name": "豚しゃぶ肉",
@@ -103,41 +131,34 @@ const INGREDIENTS = [
     "beautySub": "むくみ改善",
     "yakuzenMain": "疲労回復",
     "yakuzenSub": "胃腸ケア",
-    "memo": "薄切りで蒸し時間が短く使いやすい。",
-    "steamTime": "5〜8分"
+    "memo": "薄切りで火が通りやすく、野菜と重ねて蒸しやすい。",
+    "steamTime": "6〜8分",
+    "nutrition": [
+      "たんぱく質",
+      "ビタミンB1"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "たんぱく質、ビタミンB1を含む食材。薬膳では平性寄りとして扱い、疲労回復を意識したい日に取り入れやすい。"
   },
   {
-    "name": "豚ヒレ",
-    "category": "タンパク質",
-    "season": "通年",
-    "beautyMain": "ダイエット",
-    "beautySub": "疲労回復",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "脂質を抑えつつ満足感を出せる。",
-    "steamTime": "10〜15分"
-  },
-  {
-    "name": "豚肩ロース",
-    "category": "タンパク質",
-    "season": "通年",
-    "beautyMain": "疲労回復",
-    "beautySub": "冷え改善",
-    "yakuzenMain": "冷え改善",
-    "yakuzenSub": "疲労回復",
-    "memo": "食べごたえを出したい日に。",
-    "steamTime": "10〜15分"
-  },
-  {
-    "name": "牛赤身肉",
+    "name": "牛こま肉",
     "category": "タンパク質",
     "season": "通年",
     "beautyMain": "疲労回復",
     "beautySub": "美肌",
-    "yakuzenMain": "巡りケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "鉄分やたんぱく質を意識したい日に。",
-    "steamTime": "10〜15分"
+    "yakuzenMain": "疲労回復",
+    "yakuzenSub": "巡りケア",
+    "memo": "鉄分やたんぱく質を意識したい日に。少量でも満足感が出る。",
+    "steamTime": "8〜10分",
+    "nutrition": [
+      "たんぱく質",
+      "鉄",
+      "亜鉛"
+    ],
+    "property": "温性",
+    "taste": "甘",
+    "reviewNote": "たんぱく質、鉄、亜鉛を含む食材。薬膳では温性寄りとして扱い、疲労回復を意識したい日に取り入れやすい。"
   },
   {
     "name": "鮭",
@@ -145,10 +166,18 @@ const INGREDIENTS = [
     "season": "通年",
     "beautyMain": "美肌",
     "beautySub": "透明感",
-    "yakuzenMain": "巡りケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "アスタキサンチンを含む美容定番食材。",
-    "steamTime": "10〜15分"
+    "yakuzenMain": "疲労回復",
+    "yakuzenSub": "冷え改善",
+    "memo": "アスタキサンチンを含む美容定番食材。彩りもよい。",
+    "steamTime": "10〜12分",
+    "nutrition": [
+      "たんぱく質",
+      "アスタキサンチン",
+      "ビタミンD"
+    ],
+    "property": "温性",
+    "taste": "甘",
+    "reviewNote": "たんぱく質、アスタキサンチン、ビタミンDを含む食材。薬膳では温性寄りとして扱い、疲労回復を意識したい日に取り入れやすい。"
   },
   {
     "name": "タラ",
@@ -156,21 +185,17 @@ const INGREDIENTS = [
     "season": "冬",
     "beautyMain": "ダイエット",
     "beautySub": "二日酔い",
-    "yakuzenMain": "二日酔い",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "低脂質で軽めの蒸しごはんに合う。",
-    "steamTime": "10〜15分"
-  },
-  {
-    "name": "鯖",
-    "category": "タンパク質",
-    "season": "秋",
-    "beautyMain": "美肌",
-    "beautySub": "肌荒れ",
-    "yakuzenMain": "巡りケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "良質な脂質を摂りたい日に。",
-    "steamTime": "10〜15分"
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "二日酔い",
+    "memo": "低脂質でやさしい味。重たくない蒸しごはんに。",
+    "steamTime": "8〜10分",
+    "nutrition": [
+      "たんぱく質",
+      "低脂質"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "たんぱく質、低脂質を含む食材。薬膳では平性寄りとして扱い、胃腸ケアを意識したい日に取り入れやすい。"
   },
   {
     "name": "ぶり",
@@ -180,30 +205,53 @@ const INGREDIENTS = [
     "beautySub": "冷え改善",
     "yakuzenMain": "冷え改善",
     "yakuzenSub": "疲労回復",
-    "memo": "冬に満足感を出しやすい魚。",
-    "steamTime": "10〜15分"
+    "memo": "冬に満足感を出しやすい魚。脂がのって蒸してもおいしい。",
+    "steamTime": "10〜12分",
+    "nutrition": [
+      "たんぱく質",
+      "脂質",
+      "ビタミンB群"
+    ],
+    "property": "温性",
+    "taste": "甘",
+    "reviewNote": "たんぱく質、脂質、ビタミンB群を含む食材。薬膳では温性寄りとして扱い、冷え改善を意識したい日に取り入れやすい。"
   },
   {
-    "name": "まぐろ",
+    "name": "サバ",
     "category": "タンパク質",
-    "season": "通年",
-    "beautyMain": "ダイエット",
-    "beautySub": "疲労回復",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "高タンパクで脂質を抑えやすい。",
-    "steamTime": "10〜15分"
-  },
-  {
-    "name": "カツオ",
-    "category": "タンパク質",
-    "season": "春",
-    "beautyMain": "疲労回復",
-    "beautySub": "美肌",
+    "season": "秋",
+    "beautyMain": "美肌",
+    "beautySub": "肌荒れ",
     "yakuzenMain": "巡りケア",
     "yakuzenSub": "疲労回復",
-    "memo": "鉄分やたんぱく質を意識したい日に。",
-    "steamTime": "10〜15分"
+    "memo": "良質な脂質を摂りたい日に。野菜と合わせると食べやすい。",
+    "steamTime": "10〜12分",
+    "nutrition": [
+      "たんぱく質",
+      "DHA・EPA",
+      "ビタミンD"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "たんぱく質、DHA・EPA、ビタミンDを含む食材。薬膳では平性寄りとして扱い、巡りケアを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "ししゃも",
+    "category": "タンパク質",
+    "season": "秋",
+    "beautyMain": "美肌",
+    "beautySub": "疲労回復",
+    "yakuzenMain": "巡りケア",
+    "yakuzenSub": "疲労回復",
+    "memo": "丸ごと食べられるのでカルシウムも摂りやすい魚。",
+    "steamTime": "8〜10分",
+    "nutrition": [
+      "たんぱく質",
+      "カルシウム"
+    ],
+    "property": "平性",
+    "taste": "甘・鹹",
+    "reviewNote": "たんぱく質、カルシウムを含む食材。薬膳では平性寄りとして扱い、巡りケアを意識したい日に取り入れやすい。"
   },
   {
     "name": "エビ",
@@ -213,8 +261,15 @@ const INGREDIENTS = [
     "beautySub": "ダイエット",
     "yakuzenMain": "冷え改善",
     "yakuzenSub": "疲労回復",
-    "memo": "軽めで彩りも出しやすい。",
-    "steamTime": "5〜8分"
+    "memo": "高たんぱく・低脂質で、ぷりぷり食感が楽しめる。",
+    "steamTime": "6〜8分",
+    "nutrition": [
+      "たんぱく質",
+      "低脂質"
+    ],
+    "property": "温性",
+    "taste": "甘・鹹",
+    "reviewNote": "たんぱく質、低脂質を含む食材。薬膳では温性寄りとして扱い、冷え改善を意識したい日に取り入れやすい。"
   },
   {
     "name": "ホタテ",
@@ -224,30 +279,51 @@ const INGREDIENTS = [
     "beautySub": "疲労回復",
     "yakuzenMain": "疲労回復",
     "yakuzenSub": "胃腸ケア",
-    "memo": "うまみがあり満足感を足せる。",
-    "steamTime": "5〜8分"
+    "memo": "うま味が強く、少量でも満足感を足しやすい。",
+    "steamTime": "6〜8分",
+    "nutrition": [
+      "たんぱく質",
+      "亜鉛"
+    ],
+    "property": "平性",
+    "taste": "甘・鹹",
+    "reviewNote": "たんぱく質、亜鉛を含む食材。薬膳では平性寄りとして扱い、疲労回復を意識したい日に取り入れやすい。"
   },
   {
     "name": "イカ",
     "category": "タンパク質",
-    "season": "夏",
+    "season": "通年",
     "beautyMain": "ダイエット",
     "beautySub": "疲労回復",
-    "yakuzenMain": "夏バテ対策",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "低脂質でさっぱり食べやすい。",
-    "steamTime": "5〜8分"
+    "yakuzenMain": "疲労回復",
+    "yakuzenSub": "夏バテ対策",
+    "memo": "低脂質でさっぱり食べやすい。噛みごたえもある。",
+    "steamTime": "6〜8分",
+    "nutrition": [
+      "たんぱく質",
+      "タウリン"
+    ],
+    "property": "平性",
+    "taste": "甘・鹹",
+    "reviewNote": "たんぱく質、タウリンを含む食材。薬膳では平性寄りとして扱い、疲労回復を意識したい日に取り入れやすい。"
   },
   {
     "name": "タコ",
     "category": "タンパク質",
-    "season": "夏",
+    "season": "通年",
     "beautyMain": "疲労回復",
     "beautySub": "ダイエット",
-    "yakuzenMain": "夏バテ対策",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "噛みごたえがあり満足感を出せる。",
-    "steamTime": "5〜8分"
+    "yakuzenMain": "疲労回復",
+    "yakuzenSub": "夏バテ対策",
+    "memo": "噛みごたえがあり満足感を出せる。さっぱり系のたれと相性◎。",
+    "steamTime": "6〜8分",
+    "nutrition": [
+      "たんぱく質",
+      "タウリン"
+    ],
+    "property": "平性",
+    "taste": "甘・鹹",
+    "reviewNote": "たんぱく質、タウリンを含む食材。薬膳では平性寄りとして扱い、疲労回復を意識したい日に取り入れやすい。"
   },
   {
     "name": "あさり",
@@ -256,42 +332,17 @@ const INGREDIENTS = [
     "beautyMain": "二日酔い",
     "beautySub": "疲労回復",
     "yakuzenMain": "二日酔い",
-    "yakuzenSub": "胃腸ケア",
+    "yakuzenSub": "むくみ改善",
     "memo": "飲みすぎた翌日やミネラルを意識したい日に。",
-    "steamTime": "5〜8分"
-  },
-  {
-    "name": "しじみ",
-    "category": "タンパク質",
-    "season": "通年",
-    "beautyMain": "二日酔い",
-    "beautySub": "疲労回復",
-    "yakuzenMain": "二日酔い",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "二日酔いの日にやさしく取り入れたい食材。",
-    "steamTime": "5〜8分"
-  },
-  {
-    "name": "チーズ",
-    "category": "タンパク質",
-    "season": "通年",
-    "beautyMain": "美肌",
-    "beautySub": "疲労回復",
-    "yakuzenMain": "冷え改善",
-    "yakuzenSub": "疲労回復",
-    "memo": "蒸し野菜やかぼちゃとの相性抜群。ご褒美感を出したい日に。",
-    "steamTime": "仕上げに1〜2分"
-  },
-  {
-    "name": "牡蠣",
-    "category": "タンパク質",
-    "season": "冬",
-    "beautyMain": "美肌",
-    "beautySub": "肌荒れ",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "亜鉛などを意識したい冬向け食材。",
-    "steamTime": "10〜15分"
+    "steamTime": "6〜8分",
+    "nutrition": [
+      "鉄",
+      "ビタミンB12",
+      "タウリン"
+    ],
+    "property": "平性",
+    "taste": "鹹",
+    "reviewNote": "鉄、ビタミンB12、タウリンを含む食材。薬膳では平性寄りとして扱い、二日酔いを意識したい日に取り入れやすい。"
   },
   {
     "name": "豆腐",
@@ -299,10 +350,71 @@ const INGREDIENTS = [
     "season": "通年",
     "beautyMain": "二日酔い",
     "beautySub": "ダイエット",
-    "yakuzenMain": "二日酔い",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "軽めに整えたい日に使いやすい。",
-    "steamTime": "10〜15分"
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "二日酔い",
+    "memo": "軽めに整えたい日に使いやすい。野菜と相性がいい。",
+    "steamTime": "8〜10分",
+    "nutrition": [
+      "植物性たんぱく質",
+      "大豆イソフラボン"
+    ],
+    "property": "涼性",
+    "taste": "甘",
+    "reviewNote": "植物性たんぱく質、大豆イソフラボンを含む食材。薬膳では涼性寄りとして扱い、胃腸ケアを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "厚揚げ",
+    "category": "タンパク質",
+    "season": "通年",
+    "beautyMain": "腸活",
+    "beautySub": "ダイエット",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "疲労回復",
+    "memo": "食べ応えがあり、たんぱく質も摂りやすい。",
+    "steamTime": "10〜12分",
+    "nutrition": [
+      "植物性たんぱく質",
+      "カルシウム"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "植物性たんぱく質、カルシウムを含む食材。薬膳では平性寄りとして扱い、胃腸ケアを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "油揚げ",
+    "category": "タンパク質",
+    "season": "通年",
+    "beautyMain": "腸活",
+    "beautySub": "ダイエット",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "疲労回復",
+    "memo": "蒸すとふっくら。野菜のうま味を吸いやすい。",
+    "steamTime": "5〜7分",
+    "nutrition": [
+      "植物性たんぱく質",
+      "脂質"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "植物性たんぱく質、脂質を含む食材。薬膳では平性寄りとして扱い、胃腸ケアを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "はんぺん",
+    "category": "タンパク質",
+    "season": "通年",
+    "beautyMain": "ダイエット",
+    "beautySub": "美肌",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "疲労回復",
+    "memo": "ふわふわ食感で、せいろ蒸しにもよく合う。",
+    "steamTime": "5〜7分",
+    "nutrition": [
+      "たんぱく質",
+      "低脂質"
+    ],
+    "property": "平性",
+    "taste": "甘・鹹",
+    "reviewNote": "たんぱく質、低脂質を含む食材。薬膳では平性寄りとして扱い、胃腸ケアを意識したい日に取り入れやすい。"
   },
   {
     "name": "卵",
@@ -310,461 +422,74 @@ const INGREDIENTS = [
     "season": "通年",
     "beautyMain": "肌荒れ",
     "beautySub": "美肌",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "栄養バランスを整えやすい。",
-    "steamTime": "10〜15分"
-  },
-  {
-    "name": "春キャベツ",
-    "category": "野菜",
-    "season": "春",
-    "beautyMain": "腸活",
-    "beautySub": "美肌",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "やわらかく甘みがあり食物繊維も摂れる。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "新玉ねぎ",
-    "category": "野菜",
-    "season": "春",
-    "beautyMain": "疲労回復",
-    "beautySub": "腸活",
     "yakuzenMain": "疲労回復",
     "yakuzenSub": "胃腸ケア",
-    "memo": "甘みが出やすく春の蒸しごはん向き。",
-    "steamTime": "5〜10分"
+    "memo": "栄養バランスを整えやすい定番食材。",
+    "steamTime": "10〜12分",
+    "nutrition": [
+      "たんぱく質",
+      "ビタミン類"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "たんぱく質、ビタミン類を含む食材。薬膳では平性寄りとして扱い、疲労回復を意識したい日に取り入れやすい。"
   },
   {
-    "name": "アスパラガス",
-    "category": "野菜",
-    "season": "春",
-    "beautyMain": "疲労回復",
-    "beautySub": "美肌",
-    "yakuzenMain": "疲労回復",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "甘みが増し、シャキッとした食感が楽しめます。",
-    "steamTime": "5〜10分"
+    "name": "ウインナー",
+    "category": "タンパク質",
+    "season": "通年",
+    "beautyMain": "おまかせ",
+    "beautySub": "おまかせ",
+    "yakuzenMain": "おまかせ",
+    "yakuzenSub": "おまかせ",
+    "memo": "野菜と一緒に蒸すと手軽に楽しめる。美容・薬膳目的というより、ご褒美・満足感枠。",
+    "steamTime": "8〜10分",
+    "nutrition": [
+      "たんぱく質",
+      "脂質",
+      "塩分"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "たんぱく質、脂質、塩分を含む食材。薬膳では平性寄りとして扱い、おまかせを意識したい日に取り入れやすい。"
   },
   {
-    "name": "菜の花",
-    "category": "野菜",
-    "season": "春",
+    "name": "ベーコン",
+    "category": "タンパク質",
+    "season": "通年",
+    "beautyMain": "おまかせ",
+    "beautySub": "おまかせ",
+    "yakuzenMain": "おまかせ",
+    "yakuzenSub": "おまかせ",
+    "memo": "野菜のうま味を引き立てる。塩分・脂質は多めなので少量使いがおすすめ。",
+    "steamTime": "5〜7分",
+    "nutrition": [
+      "たんぱく質",
+      "脂質",
+      "塩分"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "たんぱく質、脂質、塩分を含む食材。薬膳では平性寄りとして扱い、おまかせを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "チーズ",
+    "category": "タンパク質",
+    "season": "通年",
     "beautyMain": "美肌",
-    "beautySub": "肌荒れ",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "春らしい苦みと栄養感を足せる。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "スナップえんどう",
-    "category": "野菜",
-    "season": "春",
-    "beautyMain": "美肌",
-    "beautySub": "透明感",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "彩りと甘みを足しやすい。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "そら豆",
-    "category": "野菜",
-    "season": "春",
-    "beautyMain": "疲労回復",
-    "beautySub": "ダイエット",
-    "yakuzenMain": "疲労回復",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "春の満足感食材として使える。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "クレソン",
-    "category": "野菜",
-    "season": "春",
-    "beautyMain": "透明感",
-    "beautySub": "美肌",
-    "yakuzenMain": "ストレスケア",
-    "yakuzenSub": "巡りケア",
-    "memo": "香りがありさっぱり感を出せる。",
-    "steamTime": "3〜5分"
-  },
-  {
-    "name": "ラディッシュ",
-    "category": "野菜",
-    "season": "春",
-    "beautyMain": "透明感",
-    "beautySub": "むくみ改善",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "彩りを足したい日に。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "セロリ",
-    "category": "野菜",
-    "season": "春",
-    "beautyMain": "むくみ改善",
-    "beautySub": "二日酔い",
-    "yakuzenMain": "二日酔い",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "香りでさっぱり食べやすい。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "ふき",
-    "category": "野菜",
-    "season": "春",
-    "beautyMain": "腸活",
-    "beautySub": "むくみ改善",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "むくみ改善",
-    "memo": "春らしい香りを足せる。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "うど",
-    "category": "野菜",
-    "season": "春",
-    "beautyMain": "むくみ改善",
-    "beautySub": "腸活",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "すっきりした味わい。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "絹さや",
-    "category": "野菜",
-    "season": "春",
-    "beautyMain": "美肌",
-    "beautySub": "透明感",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "彩りを足しやすい春野菜。",
-    "steamTime": "3〜5分"
-  },
-  {
-    "name": "せり",
-    "category": "野菜",
-    "season": "春",
-    "beautyMain": "二日酔い",
-    "beautySub": "むくみ改善",
-    "yakuzenMain": "二日酔い",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "香りがよく、飲みすぎた翌日にもさっぱり使いやすい。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "パプリカ赤",
-    "category": "野菜",
-    "season": "夏",
-    "beautyMain": "透明感",
-    "beautySub": "肌荒れ",
-    "yakuzenMain": "免疫力UP",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "ビタミンCを意識したい日に。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "パプリカ黄",
-    "category": "野菜",
-    "season": "夏",
-    "beautyMain": "透明感",
-    "beautySub": "美肌",
-    "yakuzenMain": "免疫力UP",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "彩りがよく美容目的に使いやすい。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "オクラ",
-    "category": "野菜",
-    "season": "夏",
-    "beautyMain": "腸活",
-    "beautySub": "むくみ改善",
-    "yakuzenMain": "夏バテ対策",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "ねばねば食感で腸活向き。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "ズッキーニ",
-    "category": "野菜",
-    "season": "夏",
-    "beautyMain": "ダイエット",
-    "beautySub": "むくみ改善",
-    "yakuzenMain": "夏バテ対策",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "軽めでかさ増ししやすい。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "なす",
-    "category": "野菜",
-    "season": "夏",
-    "beautyMain": "美肌",
-    "beautySub": "むくみ改善",
-    "yakuzenMain": "夏バテ対策",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "蒸すととろっとやわらかくなり、甘みも増します。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "トマト",
-    "category": "野菜",
-    "season": "夏",
-    "beautyMain": "二日酔い",
-    "beautySub": "透明感",
-    "yakuzenMain": "二日酔い",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "酸味でさっぱり食べやすい。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "ミニトマト",
-    "category": "野菜",
-    "season": "夏",
-    "beautyMain": "透明感",
-    "beautySub": "美肌",
-    "yakuzenMain": "夏バテ対策",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "彩りと酸味を足しやすい。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "きゅうり",
-    "category": "野菜",
-    "season": "夏",
-    "beautyMain": "二日酔い",
-    "beautySub": "むくみ改善",
-    "yakuzenMain": "二日酔い",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "さっぱり仕上げたい日に。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "モロヘイヤ",
-    "category": "野菜",
-    "season": "夏",
-    "beautyMain": "肌荒れ",
-    "beautySub": "美肌",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "栄養感のある夏野菜。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "ゴーヤ",
-    "category": "野菜",
-    "season": "夏",
-    "beautyMain": "疲労回復",
-    "beautySub": "透明感",
-    "yakuzenMain": "夏バテ対策",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "夏バテ気味の日に。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "枝豆",
-    "category": "野菜",
-    "season": "夏",
-    "beautyMain": "ダイエット",
     "beautySub": "疲労回復",
-    "yakuzenMain": "夏バテ対策",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "たんぱく質感と満足感を足せる。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "とうがん",
-    "category": "野菜",
-    "season": "夏",
-    "beautyMain": "むくみ改善",
-    "beautySub": "二日酔い",
-    "yakuzenMain": "二日酔い",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "水分が多く、軽く整えたい日に。",
-    "steamTime": "10〜15分"
-  },
-  {
-    "name": "ししとう",
-    "category": "野菜",
-    "season": "夏",
-    "beautyMain": "透明感",
-    "beautySub": "疲労回復",
-    "yakuzenMain": "疲労回復",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "美味しい苦みを足せる。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "みょうが",
-    "category": "野菜",
-    "season": "夏",
-    "beautyMain": "二日酔い",
-    "beautySub": "むくみ改善",
-    "yakuzenMain": "二日酔い",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "香りでさっぱり感を出せる。",
-    "steamTime": "2〜3分"
-  },
-  {
-    "name": "青じそ",
-    "category": "野菜",
-    "season": "夏",
-    "beautyMain": "二日酔い",
-    "beautySub": "透明感",
-    "yakuzenMain": "二日酔い",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "香りで食欲がない日にも使いやすい。",
-    "steamTime": "仕上げ"
-  },
-  {
-    "name": "春菊",
-    "category": "野菜",
-    "season": "秋",
-    "beautyMain": "美肌",
-    "beautySub": "透明感",
-    "yakuzenMain": "ストレスケア",
-    "yakuzenSub": "巡りケア",
-    "memo": "香りがいい。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "かぶ",
-    "category": "野菜",
-    "season": "秋",
-    "beautyMain": "むくみ改善",
-    "beautySub": "腸活",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "むくみ改善",
-    "memo": "やさしい甘みで食べやすい。",
-    "steamTime": "10〜15分"
-  },
-  {
-    "name": "にんじん",
-    "category": "野菜",
-    "season": "秋",
-    "beautyMain": "肌荒れ",
-    "beautySub": "美肌",
-    "yakuzenMain": "免疫力UP",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "彩りとβカロテンを足せる。",
-    "steamTime": "10〜15分"
-  },
-  {
-    "name": "チンゲンサイ",
-    "category": "野菜",
-    "season": "秋",
-    "beautyMain": "透明感",
-    "beautySub": "ダイエット",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "軽めで使いやすい青菜。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "ビーツ",
-    "category": "野菜",
-    "season": "秋",
-    "beautyMain": "疲労回復",
-    "beautySub": "透明感",
-    "yakuzenMain": "巡りケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "色がきれいで特別感がある。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "水菜",
-    "category": "野菜",
-    "season": "秋",
-    "beautyMain": "ダイエット",
-    "beautySub": "透明感",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "軽くさっぱり食べたい日に。",
-    "steamTime": "3〜5分"
-  },
-  {
-    "name": "紫キャベツ",
-    "category": "野菜",
-    "season": "秋",
-    "beautyMain": "透明感",
-    "beautySub": "腸活",
-    "yakuzenMain": "巡りケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "彩りがきれいで見た目が華やか。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "ケール",
-    "category": "野菜",
-    "season": "秋",
-    "beautyMain": "肌荒れ",
-    "beautySub": "美肌",
-    "yakuzenMain": "免疫力UP",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "美容目的に使いやすい青菜。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "白菜",
-    "category": "野菜",
-    "season": "冬",
-    "beautyMain": "二日酔い",
-    "beautySub": "ダイエット",
-    "yakuzenMain": "二日酔い",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "かさ増ししやすく軽めに食べられる。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "長ねぎ",
-    "category": "野菜",
-    "season": "冬",
-    "beautyMain": "冷え改善",
-    "beautySub": "疲労回復",
-    "yakuzenMain": "冷え改善",
-    "yakuzenSub": "疲労回復",
-    "memo": "冬の蒸しごはんに香りを足せる。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "大根",
-    "category": "野菜",
-    "season": "冬",
-    "beautyMain": "二日酔い",
-    "beautySub": "むくみ改善",
-    "yakuzenMain": "二日酔い",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "さっぱり軽く食べたい日に。",
-    "steamTime": "10〜15分"
-  },
-  {
-    "name": "小松菜",
-    "category": "野菜",
-    "season": "冬",
-    "beautyMain": "肌荒れ",
-    "beautySub": "透明感",
-    "yakuzenMain": "免疫力UP",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "青菜の栄養感を足しやすい。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "ほうれん草",
-    "category": "野菜",
-    "season": "冬",
-    "beautyMain": "肌荒れ",
-    "beautySub": "美肌",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "栄養バランスを整えたい日に。",
-    "steamTime": "5〜10分"
+    "yakuzenMain": "おまかせ",
+    "yakuzenSub": "おまかせ",
+    "memo": "蒸し野菜やかぼちゃとの相性抜群。薬膳目的より、ご褒美感を足したい日に。",
+    "steamTime": "仕上げに1〜2分",
+    "nutrition": [
+      "たんぱく質",
+      "カルシウム",
+      "脂質"
+    ],
+    "property": "平性",
+    "taste": "甘・酸",
+    "reviewNote": "たんぱく質、カルシウム、脂質を含む食材。薬膳では平性寄りとして扱い、おまかせを意識したい日に取り入れやすい。"
   },
   {
     "name": "ブロッコリー",
@@ -775,7 +500,15 @@ const INGREDIENTS = [
     "yakuzenMain": "免疫力UP",
     "yakuzenSub": "胃腸ケア",
     "memo": "ビタミンCと食物繊維を意識したい日に。",
-    "steamTime": "5〜10分"
+    "steamTime": "8〜10分",
+    "nutrition": [
+      "ビタミンC",
+      "葉酸",
+      "食物繊維"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "ビタミンC、葉酸、食物繊維を含む食材。薬膳では平性寄りとして扱い、免疫力UPを意識したい日に取り入れやすい。"
   },
   {
     "name": "カリフラワー",
@@ -784,64 +517,469 @@ const INGREDIENTS = [
     "beautyMain": "ダイエット",
     "beautySub": "腸活",
     "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "軽めのかさ増しに使いやすい。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "芽キャベツ",
-    "category": "野菜",
-    "season": "冬",
-    "beautyMain": "美肌",
-    "beautySub": "腸活",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "ころっとかわいく満足感もある。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "ロマネスコ",
-    "category": "野菜",
-    "season": "冬",
-    "beautyMain": "透明感",
-    "beautySub": "美肌",
-    "yakuzenMain": "免疫力UP",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "見た目がかわいく特別感が出る。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "ターサイ",
-    "category": "野菜",
-    "season": "冬",
-    "beautyMain": "冷え改善",
-    "beautySub": "美肌",
-    "yakuzenMain": "冷え改善",
-    "yakuzenSub": "疲労回復",
-    "memo": "冬の青菜として使いやすい。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "わさび菜",
-    "category": "野菜",
-    "season": "冬",
-    "beautyMain": "透明感",
-    "beautySub": "二日酔い",
-    "yakuzenMain": "二日酔い",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "ピリッとした香りでさっぱり食べやすい。",
-    "steamTime": "5〜10分"
+    "yakuzenSub": "免疫力UP",
+    "memo": "軽めのかさ増しに使いやすい。淡白でたれとも合う。",
+    "steamTime": "8〜10分",
+    "nutrition": [
+      "ビタミンC",
+      "食物繊維"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "ビタミンC、食物繊維を含む食材。薬膳では平性寄りとして扱い、胃腸ケアを意識したい日に取り入れやすい。"
   },
   {
     "name": "キャベツ",
     "category": "野菜",
     "season": "通年",
+    "beautyMain": "腸活",
+    "beautySub": "二日酔い",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "二日酔い",
+    "memo": "通年使いやすい定番野菜。蒸すと甘みが出る。",
+    "steamTime": "8〜10分",
+    "nutrition": [
+      "ビタミンC",
+      "食物繊維"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "ビタミンC、食物繊維を含む食材。薬膳では平性寄りとして扱い、胃腸ケアを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "春キャベツ",
+    "category": "野菜",
+    "season": "春",
+    "beautyMain": "腸活",
+    "beautySub": "美肌",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "むくみ改善",
+    "memo": "やわらかく甘みがあり、春のせいろに使いやすい。",
+    "steamTime": "6〜8分",
+    "nutrition": [
+      "ビタミンC",
+      "食物繊維"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "ビタミンC、食物繊維を含む食材。薬膳では平性寄りとして扱い、胃腸ケアを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "白菜",
+    "category": "野菜",
+    "season": "冬",
     "beautyMain": "二日酔い",
-    "beautySub": "腸活",
-    "yakuzenMain": "二日酔い",
+    "beautySub": "ダイエット",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "二日酔い",
+    "memo": "かさ増ししやすく軽めに食べられる。",
+    "steamTime": "8〜10分",
+    "nutrition": [
+      "カリウム",
+      "食物繊維"
+    ],
+    "property": "涼性",
+    "taste": "甘",
+    "reviewNote": "カリウム、食物繊維を含む食材。薬膳では涼性寄りとして扱い、胃腸ケアを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "小松菜",
+    "category": "野菜",
+    "season": "冬",
+    "beautyMain": "肌荒れ",
+    "beautySub": "透明感",
+    "yakuzenMain": "免疫力UP",
+    "yakuzenSub": "巡りケア",
+    "memo": "青菜の栄養感を足しやすい。クセが少なく使いやすい。",
+    "steamTime": "5〜7分",
+    "nutrition": [
+      "カルシウム",
+      "鉄",
+      "βカロテン"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "カルシウム、鉄、βカロテンを含む食材。薬膳では平性寄りとして扱い、免疫力UPを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "ほうれん草",
+    "category": "野菜",
+    "season": "冬",
+    "beautyMain": "肌荒れ",
+    "beautySub": "美肌",
+    "yakuzenMain": "巡りケア",
+    "yakuzenSub": "疲労回復",
+    "memo": "栄養バランスを整えたい日に。",
+    "steamTime": "5〜7分",
+    "nutrition": [
+      "鉄",
+      "葉酸",
+      "βカロテン"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "鉄、葉酸、βカロテンを含む食材。薬膳では平性寄りとして扱い、巡りケアを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "チンゲン菜",
+    "category": "野菜",
+    "season": "秋",
+    "beautyMain": "透明感",
+    "beautySub": "ダイエット",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "むくみ改善",
+    "memo": "軽めで使いやすい青菜。中華風のたれとも合う。",
+    "steamTime": "5〜7分",
+    "nutrition": [
+      "βカロテン",
+      "カリウム"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "βカロテン、カリウムを含む食材。薬膳では平性寄りとして扱い、胃腸ケアを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "水菜",
+    "category": "野菜",
+    "season": "秋",
+    "beautyMain": "ダイエット",
+    "beautySub": "透明感",
+    "yakuzenMain": "むくみ改善",
     "yakuzenSub": "胃腸ケア",
-    "memo": "通年使いやすい定番野菜。",
-    "steamTime": "5〜10分"
+    "memo": "軽くさっぱり食べたい日に。短時間で火が通る。",
+    "steamTime": "3〜5分",
+    "nutrition": [
+      "カルシウム",
+      "ビタミンC"
+    ],
+    "property": "涼性",
+    "taste": "辛・甘",
+    "reviewNote": "カルシウム、ビタミンCを含む食材。薬膳では涼性寄りとして扱い、むくみ改善を意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "春菊",
+    "category": "野菜",
+    "season": "秋",
+    "beautyMain": "美肌",
+    "beautySub": "透明感",
+    "yakuzenMain": "ストレスケア",
+    "yakuzenSub": "巡りケア",
+    "memo": "香りがよく、気分を変えたい日のアクセントに。",
+    "steamTime": "5〜7分",
+    "nutrition": [
+      "βカロテン",
+      "香り成分"
+    ],
+    "property": "平性",
+    "taste": "辛・甘",
+    "reviewNote": "βカロテン、香り成分を含む食材。薬膳では平性寄りとして扱い、ストレスケアを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "アスパラガス",
+    "category": "野菜",
+    "season": "春",
+    "beautyMain": "むくみ改善",
+    "beautySub": "疲労回復",
+    "yakuzenMain": "疲労回復",
+    "yakuzenSub": "むくみ改善",
+    "memo": "甘みが増し、シャキッとした食感が楽しめる。",
+    "steamTime": "6〜8分",
+    "nutrition": [
+      "アスパラギン酸",
+      "葉酸"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "アスパラギン酸、葉酸を含む食材。薬膳では平性寄りとして扱い、疲労回復を意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "オクラ",
+    "category": "野菜",
+    "season": "夏",
+    "beautyMain": "腸活",
+    "beautySub": "むくみ改善",
+    "yakuzenMain": "夏バテ対策",
+    "yakuzenSub": "胃腸ケア",
+    "memo": "ねばねば食感で腸活を意識したい日に。",
+    "steamTime": "5〜7分",
+    "nutrition": [
+      "食物繊維",
+      "ムチン様成分"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "食物繊維、ムチン様成分を含む食材。薬膳では平性寄りとして扱い、夏バテ対策を意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "パプリカ赤",
+    "category": "野菜",
+    "season": "夏",
+    "beautyMain": "透明感",
+    "beautySub": "肌荒れ",
+    "yakuzenMain": "免疫力UP",
+    "yakuzenSub": "夏バテ対策",
+    "memo": "ビタミンCを意識したい日に。彩りもよい。",
+    "steamTime": "5〜7分",
+    "nutrition": [
+      "ビタミンC",
+      "βカロテン"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "ビタミンC、βカロテンを含む食材。薬膳では平性寄りとして扱い、免疫力UPを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "パプリカ黄",
+    "category": "野菜",
+    "season": "夏",
+    "beautyMain": "透明感",
+    "beautySub": "美肌",
+    "yakuzenMain": "免疫力UP",
+    "yakuzenSub": "夏バテ対策",
+    "memo": "彩りがよく、美容目的にも使いやすい。",
+    "steamTime": "5〜7分",
+    "nutrition": [
+      "ビタミンC",
+      "カリウム"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "ビタミンC、カリウムを含む食材。薬膳では平性寄りとして扱い、免疫力UPを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "ピーマン",
+    "category": "野菜",
+    "season": "夏",
+    "beautyMain": "透明感",
+    "beautySub": "疲労回復",
+    "yakuzenMain": "夏バテ対策",
+    "yakuzenSub": "巡りケア",
+    "memo": "手に入りやすく、短時間で蒸せる夏野菜。",
+    "steamTime": "5〜7分",
+    "nutrition": [
+      "ビタミンC",
+      "βカロテン"
+    ],
+    "property": "平性",
+    "taste": "辛・甘",
+    "reviewNote": "ビタミンC、βカロテンを含む食材。薬膳では平性寄りとして扱い、夏バテ対策を意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "にんじん",
+    "category": "野菜",
+    "season": "秋",
+    "beautyMain": "肌荒れ",
+    "beautySub": "美肌",
+    "yakuzenMain": "免疫力UP",
+    "yakuzenSub": "胃腸ケア",
+    "memo": "彩りとβカロテンを足せる。",
+    "steamTime": "10〜12分",
+    "nutrition": [
+      "βカロテン",
+      "食物繊維"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "βカロテン、食物繊維を含む食材。薬膳では平性寄りとして扱い、免疫力UPを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "大根",
+    "category": "野菜",
+    "season": "冬",
+    "beautyMain": "二日酔い",
+    "beautySub": "むくみ改善",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "二日酔い",
+    "memo": "蒸すと甘みが出る。さっぱり軽く食べたい日に。",
+    "steamTime": "12〜15分",
+    "nutrition": [
+      "消化を助ける酵素",
+      "カリウム"
+    ],
+    "property": "平性",
+    "taste": "辛・甘",
+    "reviewNote": "消化を助ける酵素、カリウムを含む食材。薬膳では平性寄りとして扱い、胃腸ケアを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "かぶ",
+    "category": "野菜",
+    "season": "秋",
+    "beautyMain": "むくみ改善",
+    "beautySub": "腸活",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "むくみ改善",
+    "memo": "やさしい甘みで食べやすい。胃腸を労りたい日に。",
+    "steamTime": "10〜12分",
+    "nutrition": [
+      "ビタミンC",
+      "食物繊維"
+    ],
+    "property": "平性",
+    "taste": "甘・辛",
+    "reviewNote": "ビタミンC、食物繊維を含む食材。薬膳では平性寄りとして扱い、胃腸ケアを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "れんこん",
+    "category": "野菜",
+    "season": "秋",
+    "beautyMain": "腸活",
+    "beautySub": "肌荒れ",
+    "yakuzenMain": "巡りケア",
+    "yakuzenSub": "胃腸ケア",
+    "memo": "歯ごたえがあり満足感を出せる。",
+    "steamTime": "10〜12分",
+    "nutrition": [
+      "ビタミンC",
+      "食物繊維"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "ビタミンC、食物繊維を含む食材。薬膳では平性寄りとして扱い、巡りケアを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "ごぼう",
+    "category": "野菜",
+    "season": "秋",
+    "beautyMain": "腸活",
+    "beautySub": "ダイエット",
+    "yakuzenMain": "巡りケア",
+    "yakuzenSub": "胃腸ケア",
+    "memo": "食物繊維をしっかり足せる。薄切りがおすすめ。",
+    "steamTime": "10〜12分",
+    "nutrition": [
+      "食物繊維",
+      "ポリフェノール"
+    ],
+    "property": "平性",
+    "taste": "苦・甘",
+    "reviewNote": "食物繊維、ポリフェノールを含む食材。薬膳では平性寄りとして扱い、巡りケアを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "長ねぎ",
+    "category": "野菜",
+    "season": "冬",
+    "beautyMain": "冷え改善",
+    "beautySub": "疲労回復",
+    "yakuzenMain": "風邪予防",
+    "yakuzenSub": "冷え改善",
+    "memo": "冬の蒸しごはんに香りを足せる。",
+    "steamTime": "8〜10分",
+    "nutrition": [
+      "香り成分",
+      "ビタミンC"
+    ],
+    "property": "温性",
+    "taste": "辛",
+    "reviewNote": "香り成分、ビタミンCを含む食材。薬膳では温性寄りとして扱い、風邪予防を意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "玉ねぎ",
+    "category": "野菜",
+    "season": "通年",
+    "beautyMain": "疲労回復",
+    "beautySub": "腸活",
+    "yakuzenMain": "巡りケア",
+    "yakuzenSub": "胃腸ケア",
+    "memo": "蒸すと甘みが増す。肉や魚とも合わせやすい。",
+    "steamTime": "10〜12分",
+    "nutrition": [
+      "硫化アリル",
+      "食物繊維"
+    ],
+    "property": "温性",
+    "taste": "辛・甘",
+    "reviewNote": "硫化アリル、食物繊維を含む食材。薬膳では温性寄りとして扱い、巡りケアを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "なす",
+    "category": "野菜",
+    "season": "夏",
+    "beautyMain": "美肌",
+    "beautySub": "むくみ改善",
+    "yakuzenMain": "夏バテ対策",
+    "yakuzenSub": "巡りケア",
+    "memo": "蒸すととろっとやわらかくなり、甘みも増す。",
+    "steamTime": "8〜10分",
+    "nutrition": [
+      "ナスニン",
+      "カリウム"
+    ],
+    "property": "涼性",
+    "taste": "甘",
+    "reviewNote": "ナスニン、カリウムを含む食材。薬膳では涼性寄りとして扱い、夏バテ対策を意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "ズッキーニ",
+    "category": "野菜",
+    "season": "夏",
+    "beautyMain": "ダイエット",
+    "beautySub": "むくみ改善",
+    "yakuzenMain": "夏バテ対策",
+    "yakuzenSub": "むくみ改善",
+    "memo": "軽めでかさ増ししやすい。夏のせいろに使いやすい。",
+    "steamTime": "6〜8分",
+    "nutrition": [
+      "カリウム",
+      "βカロテン"
+    ],
+    "property": "涼性",
+    "taste": "甘",
+    "reviewNote": "カリウム、βカロテンを含む食材。薬膳では涼性寄りとして扱い、夏バテ対策を意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "ミニトマト",
+    "category": "野菜",
+    "season": "夏",
+    "beautyMain": "美肌",
+    "beautySub": "透明感",
+    "yakuzenMain": "夏バテ対策",
+    "yakuzenSub": "胃腸ケア",
+    "memo": "丸ごと蒸せて甘みが増す。彩りもよい。",
+    "steamTime": "4〜6分",
+    "nutrition": [
+      "リコピン",
+      "ビタミンC",
+      "βカロテン"
+    ],
+    "property": "涼性",
+    "taste": "甘・酸",
+    "reviewNote": "リコピン、ビタミンC、βカロテンを含む食材。薬膳では涼性寄りとして扱い、夏バテ対策を意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "とうもろこし",
+    "category": "野菜",
+    "season": "夏",
+    "beautyMain": "疲労回復",
+    "beautySub": "腸活",
+    "yakuzenMain": "夏バテ対策",
+    "yakuzenSub": "疲労回復",
+    "memo": "甘みで満足感を出しやすい。",
+    "steamTime": "10〜12分",
+    "nutrition": [
+      "炭水化物",
+      "食物繊維"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "炭水化物、食物繊維を含む食材。薬膳では平性寄りとして扱い、夏バテ対策を意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "枝豆",
+    "category": "野菜",
+    "season": "夏",
+    "beautyMain": "ダイエット",
+    "beautySub": "疲労回復",
+    "yakuzenMain": "疲労回復",
+    "yakuzenSub": "夏バテ対策",
+    "memo": "たんぱく質感と満足感を足せる。",
+    "steamTime": "8〜10分",
+    "nutrition": [
+      "植物性たんぱく質",
+      "葉酸"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "植物性たんぱく質、葉酸を含む食材。薬膳では平性寄りとして扱い、疲労回復を意識したい日に取り入れやすい。"
   },
   {
     "name": "もやし",
@@ -850,9 +988,16 @@ const INGREDIENTS = [
     "beautyMain": "ダイエット",
     "beautySub": "疲労回復",
     "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
+    "yakuzenSub": "むくみ改善",
     "memo": "低コストでかさ増しできる。",
-    "steamTime": "5〜10分"
+    "steamTime": "4〜6分",
+    "nutrition": [
+      "ビタミンC",
+      "食物繊維"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "ビタミンC、食物繊維を含む食材。薬膳では平性寄りとして扱い、胃腸ケアを意識したい日に取り入れやすい。"
   },
   {
     "name": "豆苗",
@@ -860,362 +1005,17 @@ const INGREDIENTS = [
     "season": "通年",
     "beautyMain": "美肌",
     "beautySub": "ダイエット",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
+    "yakuzenMain": "免疫力UP",
+    "yakuzenSub": "巡りケア",
     "memo": "彩りと栄養感を足しやすい。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "さつまいも",
-    "category": "炭水化物",
-    "season": "秋",
-    "beautyMain": "腸活",
-    "beautySub": "ダイエット",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "食物繊維と満足感を出しやすい。",
-    "steamTime": "10〜20分"
-  },
-  {
-    "name": "れんこん",
-    "category": "炭水化物",
-    "season": "秋",
-    "beautyMain": "腸活",
-    "beautySub": "肌荒れ",
-    "yakuzenMain": "巡りケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "歯ごたえがあり満足感を出せる。",
-    "steamTime": "10〜20分"
-  },
-  {
-    "name": "かぼちゃ",
-    "category": "炭水化物",
-    "season": "秋",
-    "beautyMain": "肌荒れ",
-    "beautySub": "美肌",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "甘みとβカロテンを意識したい日に。",
-    "steamTime": "10〜20分"
-  },
-  {
-    "name": "ごぼう",
-    "category": "炭水化物",
-    "season": "秋",
-    "beautyMain": "腸活",
-    "beautySub": "ダイエット",
-    "yakuzenMain": "巡りケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "食物繊維をしっかり足せる。",
-    "steamTime": "10〜20分"
-  },
-  {
-    "name": "里芋",
-    "category": "炭水化物",
-    "season": "秋",
-    "beautyMain": "腸活",
-    "beautySub": "むくみ改善",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "むくみ改善",
-    "memo": "ほくっとした満足感を出せる。",
-    "steamTime": "10〜20分"
-  },
-  {
-    "name": "長芋",
-    "category": "炭水化物",
-    "season": "秋",
-    "beautyMain": "ダイエット",
-    "beautySub": "腸活",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "軽めで食感がよい。",
-    "steamTime": "10〜20分"
-  },
-  {
-    "name": "じゃがいも",
-    "category": "炭水化物",
-    "season": "通年",
-    "beautyMain": "疲労回復",
-    "beautySub": "ダイエット",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "満足感を出したい日に。",
-    "steamTime": "10〜20分"
-  },
-  {
-    "name": "メークイン",
-    "category": "炭水化物",
-    "season": "通年",
-    "beautyMain": "疲労回復",
-    "beautySub": "冷え改善",
-    "yakuzenMain": "冷え改善",
-    "yakuzenSub": "疲労回復",
-    "memo": "蒸すとしっとり食べやすい。",
-    "steamTime": "10〜20分"
-  },
-  {
-    "name": "栗",
-    "category": "炭水化物",
-    "season": "秋",
-    "beautyMain": "疲労回復",
-    "beautySub": "美肌",
-    "yakuzenMain": "疲労回復",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "秋らしい甘みと満足感を足せる。",
-    "steamTime": "10〜20分"
-  },
-  {
-    "name": "むかご",
-    "category": "炭水化物",
-    "season": "秋",
-    "beautyMain": "腸活",
-    "beautySub": "疲労回復",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "ほくほく感を足せる。",
-    "steamTime": "10〜20分"
-  },
-  {
-    "name": "銀杏",
-    "category": "炭水化物",
-    "season": "秋",
-    "beautyMain": "疲労回復",
-    "beautySub": "美肌",
-    "yakuzenMain": "巡りケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "少量で秋らしさを出せる。",
-    "steamTime": "10〜20分"
-  },
-  {
-    "name": "山芋",
-    "category": "炭水化物",
-    "season": "秋",
-    "beautyMain": "腸活",
-    "beautySub": "疲労回復",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "ねばりと満足感を足せる。",
-    "steamTime": "10〜20分"
-  },
-  {
-    "name": "自然薯",
-    "category": "炭水化物",
-    "season": "秋",
-    "beautyMain": "疲労回復",
-    "beautySub": "腸活",
-    "yakuzenMain": "疲労回復",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "特別感のある満足食材。",
-    "steamTime": "10〜20分"
-  },
-  {
-    "name": "とうもろこし",
-    "category": "炭水化物",
-    "season": "夏",
-    "beautyMain": "疲労回復",
-    "beautySub": "腸活",
-    "yakuzenMain": "夏バテ対策",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "甘みで満足感を出しやすい。",
-    "steamTime": "10〜20分"
-  },
-  {
-    "name": "舞茸",
-    "category": "きのこ",
-    "season": "秋",
-    "beautyMain": "腸活",
-    "beautySub": "美肌",
-    "yakuzenMain": "免疫力UP",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "香りとうまみが強い。",
-    "steamTime": "5〜8分"
-  },
-  {
-    "name": "しめじ",
-    "category": "きのこ",
-    "season": "秋",
-    "beautyMain": "腸活",
-    "beautySub": "二日酔い",
-    "yakuzenMain": "二日酔い",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "クセが少なく合わせやすい。",
-    "steamTime": "5〜8分"
-  },
-  {
-    "name": "えのき",
-    "category": "きのこ",
-    "season": "冬",
-    "beautyMain": "ダイエット",
-    "beautySub": "二日酔い",
-    "yakuzenMain": "二日酔い",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "低カロリーでかさ増ししやすい。",
-    "steamTime": "5〜8分"
-  },
-  {
-    "name": "しいたけ",
-    "category": "きのこ",
-    "season": "秋",
-    "beautyMain": "疲労回復",
-    "beautySub": "肌荒れ",
-    "yakuzenMain": "免疫力UP",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "うまみを足せる定番きのこ。",
-    "steamTime": "5〜8分"
-  },
-  {
-    "name": "エリンギ",
-    "category": "きのこ",
-    "season": "秋",
-    "beautyMain": "ダイエット",
-    "beautySub": "腸活",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "食感がよく満足感を足せる。",
-    "steamTime": "5〜8分"
-  },
-  {
-    "name": "なめこ",
-    "category": "きのこ",
-    "season": "秋",
-    "beautyMain": "腸活",
-    "beautySub": "むくみ改善",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "むくみ改善",
-    "memo": "つるっとした食感で食べやすい。",
-    "steamTime": "5〜8分"
-  },
-  {
-    "name": "ひらたけ",
-    "category": "きのこ",
-    "season": "秋",
-    "beautyMain": "疲労回復",
-    "beautySub": "腸活",
-    "yakuzenMain": "疲労回復",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "うまみがあり食べごたえを足せる。",
-    "steamTime": "5〜8分"
-  },
-  {
-    "name": "きくらげ",
-    "category": "きのこ",
-    "season": "通年",
-    "beautyMain": "肌荒れ",
-    "beautySub": "腸活",
-    "yakuzenMain": "巡りケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "食感がよく、腸活にも使いやすい。",
-    "steamTime": "5〜8分"
-  },
-  {
-    "name": "白舞茸",
-    "category": "きのこ",
-    "season": "秋",
-    "beautyMain": "腸活",
-    "beautySub": "美肌",
-    "yakuzenMain": "免疫力UP",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "香りがやさしく、見た目もきれい。",
-    "steamTime": "5〜8分"
-  },
-  {
-    "name": "えび",
-    "category": "タンパク質",
-    "season": "通年",
-    "beautyMain": "美肌",
-    "beautySub": "ダイエット",
-    "yakuzenMain": "冷え改善",
-    "yakuzenSub": "疲労回復",
-    "memo": "高たんぱく・低脂質で、ぷりぷり食感が楽しめます。",
-    "steamTime": "5〜8分"
-  },
-  {
-    "name": "ウインナー",
-    "category": "タンパク質",
-    "season": "通年",
-    "beautyMain": "疲労回復",
-    "beautySub": "おまかせ",
-    "yakuzenMain": "冷え改善",
-    "yakuzenSub": "疲労回復",
-    "memo": "子どもから大人まで人気。野菜と一緒に蒸してもおいしいです。",
-    "steamTime": "10〜15分"
-  },
-  {
-    "name": "厚揚げ",
-    "category": "タンパク質",
-    "season": "通年",
-    "beautyMain": "腸活",
-    "beautySub": "ダイエット",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "食べ応えがあり、たんぱく質もしっかり摂れます。",
-    "steamTime": "10〜15分"
-  },
-  {
-    "name": "モッツァレラチーズ",
-    "category": "タンパク質",
-    "season": "通年",
-    "beautyMain": "美肌",
-    "beautySub": "疲労回復",
-    "yakuzenMain": "疲労回復",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "蒸した野菜との相性抜群。仕上げにのせても◎。",
-    "steamTime": "10〜15分"
-  },
-  {
-    "name": "ベーコン",
-    "category": "タンパク質",
-    "season": "通年",
-    "beautyMain": "おまかせ",
-    "beautySub": "疲労回復",
-    "yakuzenMain": "冷え改善",
-    "yakuzenSub": "疲労回復",
-    "memo": "野菜のうま味を引き立ててくれる定番食材です。",
-    "steamTime": "5〜8分"
-  },
-  {
-    "name": "油揚げ",
-    "category": "タンパク質",
-    "season": "通年",
-    "beautyMain": "腸活",
-    "beautySub": "ダイエット",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "蒸すとふっくら。野菜との相性も抜群です。",
-    "steamTime": "5〜8分"
-  },
-  {
-    "name": "はんぺん",
-    "category": "タンパク質",
-    "season": "通年",
-    "beautyMain": "ダイエット",
-    "beautySub": "美肌",
-    "yakuzenMain": "胃腸ケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "ふわふわ食感で、せいろ蒸しにもよく合います。",
-    "steamTime": "5〜8分"
-  },
-  {
-    "name": "ししゃも",
-    "category": "タンパク質",
-    "season": "秋",
-    "beautyMain": "美肌",
-    "beautySub": "疲労回復",
-    "yakuzenMain": "巡りケア",
-    "yakuzenSub": "疲労回復",
-    "memo": "丸ごと食べられるのでカルシウムも摂りやすい魚です。",
-    "steamTime": "10〜15分"
-  },
-  {
-    "name": "にんにく",
-    "category": "野菜",
-    "season": "通年",
-    "beautyMain": "疲労回復",
-    "beautySub": "冷え改善",
-    "yakuzenMain": "冷え改善",
-    "yakuzenSub": "疲労回復",
-    "memo": "香りとうまみを足せる。疲れが気になる日に少量使うのがおすすめ。",
-    "steamTime": "5〜10分"
+    "steamTime": "4〜6分",
+    "nutrition": [
+      "βカロテン",
+      "ビタミンC"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "βカロテン、ビタミンCを含む食材。薬膳では平性寄りとして扱い、免疫力UPを意識したい日に取り入れやすい。"
   },
   {
     "name": "ニラ",
@@ -1226,18 +1026,14 @@ const INGREDIENTS = [
     "yakuzenMain": "冷え改善",
     "yakuzenSub": "疲労回復",
     "memo": "香りがあり、温めたい日や元気を出したい日に。",
-    "steamTime": "5〜10分"
-  },
-  {
-    "name": "白ねぎ",
-    "category": "野菜",
-    "season": "冬",
-    "beautyMain": "冷え改善",
-    "beautySub": "疲労回復",
-    "yakuzenMain": "冷え改善",
-    "yakuzenSub": "疲労回復",
-    "memo": "冬の温め食材として使いやすい。",
-    "steamTime": "5〜10分"
+    "steamTime": "3〜5分",
+    "nutrition": [
+      "βカロテン",
+      "香り成分"
+    ],
+    "property": "温性",
+    "taste": "辛",
+    "reviewNote": "βカロテン、香り成分を含む食材。薬膳では温性寄りとして扱い、冷え改善を意識したい日に取り入れやすい。"
   },
   {
     "name": "大葉",
@@ -1245,10 +1041,17 @@ const INGREDIENTS = [
     "season": "夏",
     "beautyMain": "二日酔い",
     "beautySub": "透明感",
-    "yakuzenMain": "二日酔い",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "仕上げにのせると香りが立ち、さっぱり食べやすい。",
-    "steamTime": "仕上げ"
+    "yakuzenMain": "ストレスケア",
+    "yakuzenSub": "夏バテ対策",
+    "memo": "仕上げにのせると香りが立つ。食欲がない日やさっぱり食べたい日に。",
+    "steamTime": "仕上げ",
+    "nutrition": [
+      "βカロテン",
+      "香り成分"
+    ],
+    "property": "平性",
+    "taste": "辛",
+    "reviewNote": "βカロテン、香り成分を含む食材。薬膳では平性寄りとして扱い、ストレスケアを意識したい日に取り入れやすい。"
   },
   {
     "name": "レモン",
@@ -1256,10 +1059,220 @@ const INGREDIENTS = [
     "season": "通年",
     "beautyMain": "透明感",
     "beautySub": "二日酔い",
-    "yakuzenMain": "二日酔い",
-    "yakuzenSub": "胃腸ケア",
-    "memo": "仕上げに絞るとさっぱり。魚や鶏肉と相性がいい。",
-    "steamTime": "仕上げ"
+    "yakuzenMain": "夏バテ対策",
+    "yakuzenSub": "二日酔い",
+    "memo": "仕上げに絞るとさっぱり。魚や鶏肉と相性がよく、薬味・たれにも使いやすい。",
+    "steamTime": "仕上げ",
+    "nutrition": [
+      "ビタミンC",
+      "クエン酸"
+    ],
+    "property": "平性",
+    "taste": "酸",
+    "reviewNote": "ビタミンC、クエン酸を含む食材。薬膳では平性寄りとして扱い、夏バテ対策を意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "しいたけ",
+    "category": "きのこ",
+    "season": "秋",
+    "beautyMain": "疲労回復",
+    "beautySub": "肌荒れ",
+    "yakuzenMain": "免疫力UP",
+    "yakuzenSub": "疲労回復",
+    "memo": "うま味を足せる定番きのこ。",
+    "steamTime": "6〜8分",
+    "nutrition": [
+      "食物繊維",
+      "ビタミンD"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "食物繊維、ビタミンDを含む食材。薬膳では平性寄りとして扱い、免疫力UPを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "しめじ",
+    "category": "きのこ",
+    "season": "秋",
+    "beautyMain": "腸活",
+    "beautySub": "二日酔い",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "二日酔い",
+    "memo": "クセが少なく合わせやすい。",
+    "steamTime": "6〜8分",
+    "nutrition": [
+      "食物繊維",
+      "ビタミンB群"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "食物繊維、ビタミンB群を含む食材。薬膳では平性寄りとして扱い、胃腸ケアを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "舞茸",
+    "category": "きのこ",
+    "season": "秋",
+    "beautyMain": "腸活",
+    "beautySub": "美肌",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "免疫力UP",
+    "memo": "香りとうま味が強い。肉とも魚とも合う。",
+    "steamTime": "6〜8分",
+    "nutrition": [
+      "食物繊維",
+      "ビタミンD"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "食物繊維、ビタミンDを含む食材。薬膳では平性寄りとして扱い、胃腸ケアを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "えのき",
+    "category": "きのこ",
+    "season": "冬",
+    "beautyMain": "ダイエット",
+    "beautySub": "二日酔い",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "むくみ改善",
+    "memo": "低カロリーでかさ増ししやすい。",
+    "steamTime": "5〜7分",
+    "nutrition": [
+      "食物繊維",
+      "ビタミンB群"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "食物繊維、ビタミンB群を含む食材。薬膳では平性寄りとして扱い、胃腸ケアを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "エリンギ",
+    "category": "きのこ",
+    "season": "秋",
+    "beautyMain": "ダイエット",
+    "beautySub": "腸活",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "疲労回復",
+    "memo": "食感がよく満足感を足せる。",
+    "steamTime": "6〜8分",
+    "nutrition": [
+      "食物繊維",
+      "カリウム"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "食物繊維、カリウムを含む食材。薬膳では平性寄りとして扱い、胃腸ケアを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "じゃがいも",
+    "category": "炭水化物",
+    "season": "通年",
+    "beautyMain": "疲労回復",
+    "beautySub": "ダイエット",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "疲労回復",
+    "memo": "満足感を出したい日に。",
+    "steamTime": "15〜20分",
+    "nutrition": [
+      "炭水化物",
+      "カリウム",
+      "ビタミンC"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "炭水化物、カリウム、ビタミンCを含む食材。薬膳では平性寄りとして扱い、胃腸ケアを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "さつまいも",
+    "category": "炭水化物",
+    "season": "秋",
+    "beautyMain": "腸活",
+    "beautySub": "ダイエット",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "疲労回復",
+    "memo": "食物繊維と満足感を出しやすい。",
+    "steamTime": "15〜20分",
+    "nutrition": [
+      "炭水化物",
+      "食物繊維",
+      "βカロテン"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "炭水化物、食物繊維、βカロテンを含む食材。薬膳では平性寄りとして扱い、胃腸ケアを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "長芋",
+    "category": "炭水化物",
+    "season": "秋",
+    "beautyMain": "ダイエット",
+    "beautySub": "腸活",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "疲労回復",
+    "memo": "ほくっとした食感になり、せいろ蒸しとも相性抜群。",
+    "steamTime": "8〜10分",
+    "nutrition": [
+      "炭水化物",
+      "食物繊維"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "炭水化物、食物繊維を含む食材。薬膳では平性寄りとして扱い、胃腸ケアを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "里芋",
+    "category": "炭水化物",
+    "season": "秋",
+    "beautyMain": "腸活",
+    "beautySub": "むくみ改善",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "むくみ改善",
+    "memo": "ほくっとした満足感を出せる。",
+    "steamTime": "15〜18分",
+    "nutrition": [
+      "炭水化物",
+      "カリウム",
+      "食物繊維"
+    ],
+    "property": "平性",
+    "taste": "甘・辛",
+    "reviewNote": "炭水化物、カリウム、食物繊維を含む食材。薬膳では平性寄りとして扱い、胃腸ケアを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "かぼちゃ",
+    "category": "炭水化物",
+    "season": "秋",
+    "beautyMain": "肌荒れ",
+    "beautySub": "美肌",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "疲労回復",
+    "memo": "甘みがあり、βカロテンを意識したい日に。",
+    "steamTime": "12〜15分",
+    "nutrition": [
+      "βカロテン",
+      "ビタミンE",
+      "食物繊維"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "reviewNote": "βカロテン、ビタミンE、食物繊維を含む食材。薬膳では平性寄りとして扱い、胃腸ケアを意識したい日に取り入れやすい。"
+  },
+  {
+    "name": "くるみ",
+    "category": "炭水化物",
+    "season": "通年",
+    "beautyMain": "美肌",
+    "beautySub": "疲労回復",
+    "yakuzenMain": "巡りケア",
+    "yakuzenSub": "疲労回復",
+    "memo": "香ばしい食感がアクセント。蒸し上がりに砕いてかけるトッピング枠。",
+    "steamTime": "仕上げにトッピング",
+    "nutrition": [
+      "良質な脂質",
+      "ビタミンE",
+      "食物繊維"
+    ],
+    "property": "温性",
+    "taste": "甘",
+    "reviewNote": "良質な脂質、ビタミンE、食物繊維を含む食材。薬膳では温性寄りとして扱い、巡りケアを意識したい日に取り入れやすい。"
   }
 ];
 
@@ -1357,7 +1370,7 @@ const SAUCES = [
       "むくみ改善",
       "ダイエット"
     ],
-    "memo": "爽やかに食べたい日に。鶏肉・魚・アボカド・ブロッコリーと相性◎。",
+    "memo": "爽やかに食べたい日に。鶏肉・魚・ブロッコリーと相性◎。",
     "recipe": "レモン汁 小さじ2＋塩 少々＋オリーブオイル少々"
   },
   {
