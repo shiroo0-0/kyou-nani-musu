@@ -189,3 +189,7 @@ h1{font-size:24px;margin:12px 0;line-height:1.35}
 .hidden{display:none!important}
 
 #result:empty,.result-card:empty{display:none}
+
+.detail{margin-top:8px;padding-top:8px;border-top:1px dashed #dff1f9;color:var(--muted);font-size:12px;line-height:1.65}
+.detail-title{display:block;color:#5f8fa8;font-weight:900;margin-top:8px}
+.detail-list{margin:3px 0 0}
