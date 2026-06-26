@@ -128,21 +128,10 @@ function roll(mode){
     <div class="info">
       <b>🫚 今日のおすすめ薬味・たれ</b>
       <div class="sauce-card">
-        <b>✨ ${sauce.name}</b>
-
-        <br><br>
-
-        <small>
-          ${sauce.type} / ${sauce.memo}
-        </small>
-
-        <br><br>
-
+        <b>✨ ${sauce.name}</b><br><br>
+        <small>${sauce.type} / ${sauce.memo}</small><br><br>
         <b>🍳 作り方</b><br>
-
-        <small>
-          ${sauce.recipe}
-        </small>
+        <small>${sauce.recipe}</small>
       </div>
     </div>
 
@@ -194,6 +183,8 @@ function updateZukanFilter(){
   const goals=goalMap(zukanMode);
   filter.innerHTML=`<option value="all">すべての目的</option>${Object.keys(goals).filter(goal=>goal!=="おまかせ").map(goal=>`<option value="${goal}">${goal}</option>`).join("")}`;
 }
+
+function formatList(items){if(!items||!items.length)return "✦ なし";return items.map(v=>`✦ ${v}`).join("<br>")}
 
 function renderZukan(){
   const zukanMode=document.getElementById("zukanMode").value;
