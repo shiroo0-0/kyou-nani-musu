@@ -126,12 +126,23 @@ function roll(mode){
     `).join("")}
 
     <div class="info">
-      <b>🫚 今日のおすすめ薬味・たれ</b>
       <div class="sauce-card">
-        <b>${sauce.name}</b>
-        <small>${sauce.type} / ${sauce.memo}<br>作り方：${sauce.recipe}</small>
-      </div>
-    </div>
+  <b>✨ ${sauce.name}</b>
+
+  <br><br>
+
+  <small>
+    ${sauce.type} / ${sauce.memo}
+  </small>
+
+  <br><br>
+
+  <b>🍳 作り方</b><br>
+
+  <small>
+    ${sauce.recipe}
+  </small>
+</div>
 
     <div class="info">
       <b>💡 ワンポイント</b>
