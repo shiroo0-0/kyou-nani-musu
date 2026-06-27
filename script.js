@@ -268,17 +268,35 @@ function renderZukan(){
   if(zukanMode!=="all"&&selectedGoal!=="all")items=items.filter(item=>matchesGoal(item,selectedGoal,zukanMode));
 
   zukanList.innerHTML=items.map((item,index)=>`
-    <div class="item">
+    <div class="item zukan-item">
       <div class="emoji">${rainbowEmoji(index)}</div>
-      <div>
-        <b>${item.name}</b>
-        <small>
-          ${item.category} / ${item.season}<br>
-          🩵 美容：${item.beautyMain}・${item.beautySub}<br>
-          🌿 薬膳：${item.yakuzenMain}・${item.yakuzenSub}<br>
-          蒸し時間：${item.steamTime}<br>
-          ${item.memo}
-        </small>
+
+      <div class="item-content">
+        <b class="item-title">${item.name}</b>
+        <div class="item-meta">${item.category} / ${item.season}</div>
+
+        <div class="detail">
+          <span class="detail-title">🩵 栄養ポイント</span>
+          <div class="nutrition-list">${formatNutritionSimple(item)}</div>
+
+          <span class="detail-title">🩵 美容</span>
+          <div class="detail-list">✦ ${item.beautyMain}<br>✦ ${item.beautySub}</div>
+
+          <span class="detail-title">🌿 薬膳ポイント</span>
+          <div class="detail-list">✦ ${item.yakuzenMain}<br>✦ ${item.yakuzenSub}</div>
+
+          <span class="detail-title">🥣 おすすめのたれ</span>
+          <div class="detail-list">${formatList(item.recommendedSauces)}</div>
+
+          <span class="detail-title">🤍 相性のいい食材</span>
+          <div class="detail-list">${formatList(item.pairings)}</div>
+
+          <span class="detail-title">💬 ワンポイント</span>
+          <div class="detail-text">${item.zukanNote || item.memo}</div>
+
+          <span class="detail-title">⏱ 蒸し時間</span>
+          <div class="detail-text">${item.steamTime}</div>
+        </div>
       </div>
     </div>
   `).join("");
