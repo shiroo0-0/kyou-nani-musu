@@ -269,7 +269,6 @@ function renderZukan(){
 
   zukanList.innerHTML=items.map((item,index)=>`
     <div class="item zukan-item">
-      <div class="emoji">${rainbowEmoji(index)}</div>
 
       <div class="item-content">
         <b class="item-title">${item.name}</b>
