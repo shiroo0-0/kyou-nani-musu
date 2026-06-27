@@ -335,3 +335,16 @@ h1{font-size:24px;margin:12px 0;line-height:1.35}
   font-weight:900;
   line-height:1.55;
 }
+/* 食材図鑑の左絵文字を非表示 */
+.zukan-item .emoji{
+  display:none !important;
+}
+
+.zukan-item{
+  display:block;
+}
+
+.zukan-item .item-content{
+  width:100%;
+  margin-left:0;
+}
