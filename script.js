@@ -185,12 +185,14 @@ function updateZukanFilter(){
 }
 
 
+
 function nutritionIcon(name) {
   const icons = {
     "ビタミンC": "🍋",
     "β-カロテン": "🥕",
     "βカロテン": "🥕",
     "食物繊維": "🌿",
+    "水溶性食物繊維": "🌿",
     "葉酸": "🤍",
     "カリウム": "💧",
     "たんぱく質": "💪",
@@ -221,7 +223,6 @@ function nutritionIcon(name) {
     "硫化アリル": "🧅",
     "香り成分": "🌿",
     "消化を助ける酵素": "🫧",
-    "水溶性食物繊維": "🌿",
     "グアニル酸": "🍄",
     "ナトリウム": "🧂",
     "塩分": "🧂",
@@ -233,61 +234,26 @@ function nutritionIcon(name) {
   return icons[name] || "✦";
 }
 
-function nutritionDescription(name, benefit) {
-  const descriptions = {
-    "ビタミンC": "美容や透明感を意識したい日にうれしい栄養素✨",
-    "β-カロテン": "体内でビタミンAに変わり、肌や粘膜をサポート✨",
-    "βカロテン": "体内でビタミンAに変わり、肌や粘膜をサポート✨",
-    "食物繊維": "腸内環境を整えたい日に取り入れたい栄養素✨",
-    "葉酸": "体づくりや日々のコンディションを支える栄養素✨",
-    "カリウム": "塩分バランスを整え、むくみ対策を意識したい日に✨",
-    "たんぱく質": "肌・髪・筋肉など、体づくりの土台になる栄養素✨",
-    "植物性たんぱく質": "軽めにたんぱく質を取り入れたい日に✨",
-    "カルシウム": "骨や体づくりを意識したい日にうれしい栄養素✨",
-    "鉄": "巡りや血色を意識したい日に取り入れたい栄養素✨",
-    "亜鉛": "肌や体調管理をサポートするミネラル✨",
-    "ビタミンD": "体調管理や骨の健康を意識したい日に✨",
-    "ビタミンE": "美容や巡りを意識したい日にうれしい栄養素✨",
-    "ビタミンB1": "エネルギー代謝を助け、疲れが気になる日に✨",
-    "ビタミンB6": "たんぱく質の代謝を支える栄養素✨",
-    "ビタミンB12": "巡りや体づくりを意識したい日に✨",
-    "ビタミンB群": "エネルギー代謝を支える栄養素✨",
-    "ナイアシン": "エネルギー代謝を助けるビタミンB群の一種✨",
-    "DHA・EPA": "魚に含まれる良質な脂質。美容や健康管理に✨",
-    "アスタキサンチン": "鮭などの赤い色素成分。美容を意識したい日に✨",
-    "リコピン": "トマト系に含まれる赤い色素成分。美容・透明感に✨",
-    "タウリン": "魚介に含まれる成分。疲れが気になる日に✨",
-    "マグネシウム": "体づくりやコンディション管理を支えるミネラル✨",
-    "良質な脂質": "美容や満足感を意識したい日に取り入れたい脂質✨",
-    "オメガ3脂肪酸": "くるみなどに含まれる良質な脂質✨",
-    "低脂質": "軽めに食べたい日にうれしいポイント✨",
-    "低カロリー": "かさ増しや軽めの食事に使いやすいポイント✨",
-    "炭水化物": "満足感やエネルギー源になる栄養素✨",
-    "ポリフェノール": "美容を意識したい日にうれしい植物由来成分✨",
-    "ナスニン": "なすの紫色の成分。美容を意識したい日に✨",
-    "硫化アリル": "玉ねぎなどの香り成分。巡りや疲労回復を意識したい日に✨",
-    "香り成分": "食欲や気分転換をサポートしてくれる香りの成分✨"
-  };
-  return descriptions[name] || `${benefit}を意識したい日に取り入れたい栄養ポイント✨`;
-}
-
-function formatNutritionCards(item) {
-  if (!item.nutrition || !item.nutrition.length) {
-    return `<div class="nutrition-card">✦ 栄養ポイント準備中</div>`;
+function formatNutritionSimple(item) {
+  const names = item.nutritionNames || (item.nutrition || []).map(n => n.name);
+  if (!names || !names.length) {
+    return `<div class="nutrition-simple">✦ 栄養ポイント準備中</div>`;
   }
 
-  return item.nutrition.map(n => {
-    const icon = nutritionIcon(n.name);
-    const desc = nutritionDescription(n.name, n.benefit);
-    return `
-      <div class="nutrition-card">
-        <div class="nutrition-head">${icon} ${n.name}</div>
-        <div class="nutrition-benefit">${n.benefit}</div>
-        <div class="nutrition-desc">${desc}</div>
-      </div>
-    `;
-  }).join("");
+  const list = names.map(name => `
+    <div class="nutrition-line">${nutritionIcon(name)} ${name}</div>
+  `).join("");
+
+  const summary = item.nutritionSummary || "毎日の食事に取り入れやすい栄養ポイントです";
+
+  return `
+    <div class="nutrition-simple">
+      ${list}
+      <div class="nutrition-summary">✨ ${summary}</div>
+    </div>
+  `;
 }
+
 
 function formatList(items){if(!items||!items.length)return "✦ なし";return items.map(v=>`✦ ${v}`).join("<br>")}
 
