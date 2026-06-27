@@ -1,314 +1,3387 @@
-let currentMode = "beauty";
-let currentBeautyGoal = "おまかせ";
-let currentYakuzenGoal = "おまかせ";
+// きょうなに蒸す？ Ver.7 data.js
+// 表示整理版：栄養ポイントは「栄養素一覧＋おすすめ一文」で表示
+// 栄養：文部科学省 食品成分データベース / 日本食品標準成分表（八訂）を主に参照
+// 薬膳：一般的な中医学・食養生の考え方を、日常で使いやすい言葉に整理
+// 注意：医療・治療目的の情報ではありません。体調不良がある場合は医療機関へ相談してください。
 
-function currentSeason(){const m=new Date().getMonth()+1;if(m>=3&&m<=5)return"春";if(m>=6&&m<=8)return"夏";if(m>=9&&m<=11)return"秋";return"冬"}
-function goalMap(mode){return mode==="yakuzen"?YAKUZEN_GOALS:BEAUTY_GOALS}
-function activeGoal(mode){return mode==="yakuzen"?currentYakuzenGoal:currentBeautyGoal}
-function mainKey(mode){return mode==="yakuzen"?"yakuzenMain":"beautyMain"}
-function subKey(mode){return mode==="yakuzen"?"yakuzenSub":"beautySub"}
-function matchesGoal(item,goal,mode){return goal==="おまかせ"||item[mainKey(mode)]===goal||item[subKey(mode)]===goal}
-function matchesSeason(item,season){const s=season==="auto"?currentSeason():season;return season==="all"||item.season===s||item.season==="通年"}
+const BEAUTY_GOALS = {
+  "美肌": "肌・髪・体づくりを意識したい日",
+  "透明感": "ビタミンや彩り野菜を取り入れたい日",
+  "肌荒れケア": "肌のゆらぎが気になる日に",
+  "腸活": "食物繊維を意識したい日",
+  "むくみ対策": "カリウムや水分バランスを意識したい日",
+  "ダイエット": "軽めでも満足感を出したい日",
+  "疲労回復": "たんぱく質やビタミンB群を意識したい日",
+  "冷え対策": "温める食材を取り入れたい日",
+  "二日酔い": "さっぱり整えたい日",
+  "おまかせ": "迷った日のバランス提案"
+};
 
-function pool(category,goal,season,mode){
-  let items=INGREDIENTS.filter(i=>i.category===category&&matchesGoal(i,goal,mode)&&matchesSeason(i,season));
-  if(!items.length)items=INGREDIENTS.filter(i=>i.category===category&&matchesGoal(i,goal,mode));
-  if(!items.length)items=INGREDIENTS.filter(i=>i.category===category&&matchesSeason(i,season));
-  if(!items.length)items=INGREDIENTS.filter(i=>i.category===category);
-  return items;
-}
+const YAKUZEN_GOALS = {
+  "冷え対策": "温める食材を取り入れたい日",
+  "胃腸ケア": "胃腸をやさしく整えたい日",
+  "むくみ対策": "水分バランスを意識したい日",
+  "疲労回復": "気力・体力を補いたい日",
+  "体調管理": "季節の変わり目に整えたい日",
+  "夏バテ対策": "暑さや食欲のなさが気になる日",
+  "風邪予防": "寒さや喉の不調が気になる日",
+  "巡りケア": "血色やめぐりを意識したい日",
+  "ストレスケア": "香りのある食材で気分を整えたい日",
+  "二日酔い": "飲みすぎた翌日にやさしく整えたい日",
+  "おまかせ": "その日の体調に合わせたバランス提案"
+};
 
-function sample(items,count){const copy=[...items],out=[];while(copy.length&&out.length<count){const idx=Math.floor(Math.random()*copy.length);out.push(copy.splice(idx,1)[0])}return out}
-function rainbowEmoji(index){const colors=["🩵","🤍","💎","🫧","🩵","🤍"];return colors[index%colors.length]}
-function modeLabel(mode){return mode==="yakuzen"?"🌿 薬膳":"🩵 美容"}
-function resultTitle(mode,goal){if(mode==="yakuzen")return goal==="おまかせ"?"今日の薬膳せいろ":`今日の${goal}せいろ`;return goal==="おまかせ"?"今日の蒸しごはん":`今日の${goal}せいろ`}
-
-function chooseSauce(mode,goal){
-  let sauces=SAUCES.filter(s=>
-    s.modes.includes(mode)&&
-    (goal==="おまかせ"||s.goals.includes(goal)||s.goals.includes("おまかせ"))
-  );
-  if(!sauces.length){
-    sauces=SAUCES.filter(s=>s.modes.includes(mode));
+const INGREDIENTS = [
+  {
+    "name": "鶏むね肉",
+    "category": "タンパク質",
+    "season": "通年",
+    "beautyMain": "ダイエット",
+    "beautySub": "美肌",
+    "yakuzenMain": "疲労回復",
+    "yakuzenSub": "胃腸ケア",
+    "nutrition": [
+      {
+        "name": "たんぱく質",
+        "benefit": "体づくり"
+      },
+      {
+        "name": "ビタミンB6",
+        "benefit": "たんぱく質代謝"
+      },
+      {
+        "name": "ナイアシン",
+        "benefit": "エネルギー代謝"
+      },
+      {
+        "name": "低脂質",
+        "benefit": "軽め"
+      }
+    ],
+    "nutritionPoints": [
+      "たんぱく質（体づくり）",
+      "ビタミンB6（たんぱく質代謝）",
+      "ナイアシン（エネルギー代謝）",
+      "低脂質（軽め）"
+    ],
+    "pairings": [
+      "ブロッコリー",
+      "キャベツ",
+      "しめじ",
+      "さつまいも"
+    ],
+    "recommendedSauces": [
+      "塩麹",
+      "柚子胡椒ポン酢",
+      "レモン塩"
+    ],
+    "property": "温性",
+    "taste": "甘",
+    "memo": "高たんぱく・低脂質で、軽めに整えたい日に使いやすい定番食材。薬膳では鶏肉は気を補う食材として扱われることが多く、疲れが気になる日にも取り入れやすいです。",
+    "zukanNote": "高たんぱく・低脂質で、軽めに整えたい日に使いやすい定番食材。薬膳では鶏肉は気を補う食材として扱われることが多く、疲れが気になる日にも取り入れやすいです。",
+    "steamTime": "12〜15分",
+    "sourceMemo": "日本食品標準成分表では、若どり・むね・皮なし・生にたんぱく質やビタミンB6などが掲載されています。",
+    "nutritionNames": [
+      "たんぱく質",
+      "ビタミンB6",
+      "ナイアシン",
+      "低脂質"
+    ],
+    "nutritionSummary": "体づくり・疲労回復・ダイエット・美肌におすすめ"
+  },
+  {
+    "name": "鶏もも肉",
+    "category": "タンパク質",
+    "season": "通年",
+    "beautyMain": "疲労回復",
+    "beautySub": "美肌",
+    "yakuzenMain": "疲労回復",
+    "yakuzenSub": "冷え対策",
+    "nutrition": [
+      {
+        "name": "たんぱく質",
+        "benefit": "体づくり"
+      },
+      {
+        "name": "ビタミンB6",
+        "benefit": "体づくり"
+      },
+      {
+        "name": "ナイアシン",
+        "benefit": "疲労回復"
+      },
+      {
+        "name": "脂質",
+        "benefit": "満足感"
+      }
+    ],
+    "nutritionPoints": [
+      "たんぱく質（体づくり）",
+      "ビタミンB6（体づくり）",
+      "ナイアシン（疲労回復）",
+      "脂質（満足感）"
+    ],
+    "pairings": [
+      "長ねぎ",
+      "白菜",
+      "しめじ",
+      "かぼちゃ"
+    ],
+    "recommendedSauces": [
+      "生姜ポン酢",
+      "柚子胡椒",
+      "味噌だれ"
+    ],
+    "property": "温性",
+    "taste": "甘",
+    "memo": "むね肉よりジューシーで満足感が出やすい食材。薬膳では鶏肉は体を温め、気を補う食材として扱われることが多いため、冷えや疲れが気になる日の蒸しごはんに合います。",
+    "zukanNote": "むね肉よりジューシーで満足感が出やすい食材。薬膳では鶏肉は体を温め、気を補う食材として扱われることが多いため、冷えや疲れが気になる日の蒸しごはんに合います。",
+    "steamTime": "15〜18分",
+    "sourceMemo": "日本食品標準成分表の鶏もも肉データを参考に、たんぱく質・ビタミンB群を中心に整理。",
+    "nutritionNames": [
+      "たんぱく質",
+      "ビタミンB6",
+      "ナイアシン",
+      "脂質"
+    ],
+    "nutritionSummary": "体づくり・疲労回復・満足感・美肌におすすめ"
+  },
+  {
+    "name": "豚しゃぶ肉",
+    "category": "タンパク質",
+    "season": "通年",
+    "beautyMain": "疲労回復",
+    "beautySub": "ダイエット",
+    "yakuzenMain": "疲労回復",
+    "yakuzenSub": "胃腸ケア",
+    "nutrition": [
+      {
+        "name": "たんぱく質",
+        "benefit": "体づくり"
+      },
+      {
+        "name": "ビタミンB1",
+        "benefit": "疲労回復"
+      },
+      {
+        "name": "ナイアシン",
+        "benefit": "エネルギー代謝"
+      },
+      {
+        "name": "亜鉛",
+        "benefit": "体調管理"
+      }
+    ],
+    "nutritionPoints": [
+      "たんぱく質（体づくり）",
+      "ビタミンB1（疲労回復）",
+      "ナイアシン（エネルギー代謝）",
+      "亜鉛（体調管理）"
+    ],
+    "pairings": [
+      "もやし",
+      "キャベツ",
+      "長ねぎ",
+      "しめじ"
+    ],
+    "recommendedSauces": [
+      "生姜ポン酢",
+      "ごまだれ",
+      "柚子胡椒ポン酢"
+    ],
+    "property": "平性",
+    "taste": "甘・鹹",
+    "memo": "薄切りで火が通りやすく、野菜と重ねて蒸しやすい食材。豚肉はビタミンB1を含むため、疲れが気になる日の主菜にも使いやすいです。",
+    "zukanNote": "薄切りで火が通りやすく、野菜と重ねて蒸しやすい食材。豚肉はビタミンB1を含むため、疲れが気になる日の主菜にも使いやすいです。",
+    "steamTime": "6〜8分",
+    "sourceMemo": "日本食品標準成分表の豚肉類データを参考に、ビタミンB1を代表栄養素として採用。",
+    "nutritionNames": [
+      "たんぱく質",
+      "ビタミンB1",
+      "ナイアシン",
+      "亜鉛"
+    ],
+    "nutritionSummary": "体づくり・疲労回復・体調管理・ダイエットにおすすめ"
+  },
+  {
+    "name": "鮭",
+    "category": "タンパク質",
+    "season": "通年",
+    "beautyMain": "美肌",
+    "beautySub": "疲労回復",
+    "yakuzenMain": "冷え対策",
+    "yakuzenSub": "疲労回復",
+    "nutrition": [
+      {
+        "name": "たんぱく質",
+        "benefit": "体づくり"
+      },
+      {
+        "name": "ビタミンD",
+        "benefit": "体調管理"
+      },
+      {
+        "name": "ビタミンB12",
+        "benefit": "巡り"
+      },
+      {
+        "name": "アスタキサンチン",
+        "benefit": "美容"
+      }
+    ],
+    "nutritionPoints": [
+      "たんぱく質（体づくり）",
+      "ビタミンD（体調管理）",
+      "ビタミンB12（巡り）",
+      "アスタキサンチン（美容）"
+    ],
+    "pairings": [
+      "ブロッコリー",
+      "じゃがいも",
+      "しめじ",
+      "ミニトマト"
+    ],
+    "recommendedSauces": [
+      "レモン塩",
+      "柚子胡椒",
+      "塩麹"
+    ],
+    "property": "温性",
+    "taste": "甘",
+    "memo": "たんぱく質に加え、ビタミンDやビタミンB群を含む魚。赤い色素成分のアスタキサンチンも美容イメージと相性がよく、彩りのよいせいろ蒸しになります。",
+    "zukanNote": "たんぱく質に加え、ビタミンDやビタミンB群を含む魚。赤い色素成分のアスタキサンチンも美容イメージと相性がよく、彩りのよいせいろ蒸しになります。",
+    "steamTime": "10〜12分",
+    "sourceMemo": "日本食品標準成分表では鮭類にビタミンD・ビタミンB12などが掲載されています。",
+    "nutritionNames": [
+      "たんぱく質",
+      "ビタミンD",
+      "ビタミンB12",
+      "アスタキサンチン"
+    ],
+    "nutritionSummary": "体づくり・体調管理・巡り・美容におすすめ"
+  },
+  {
+    "name": "エビ",
+    "category": "タンパク質",
+    "season": "通年",
+    "beautyMain": "美肌",
+    "beautySub": "ダイエット",
+    "yakuzenMain": "冷え対策",
+    "yakuzenSub": "疲労回復",
+    "nutrition": [
+      {
+        "name": "たんぱく質",
+        "benefit": "体づくり"
+      },
+      {
+        "name": "低脂質",
+        "benefit": "軽め"
+      },
+      {
+        "name": "ビタミンB12",
+        "benefit": "巡り"
+      },
+      {
+        "name": "亜鉛",
+        "benefit": "体調管理"
+      }
+    ],
+    "nutritionPoints": [
+      "たんぱく質（体づくり）",
+      "低脂質（軽め）",
+      "ビタミンB12（巡り）",
+      "亜鉛（体調管理）"
+    ],
+    "pairings": [
+      "ブロッコリー",
+      "ミニトマト",
+      "アスパラガス",
+      "かぼちゃ"
+    ],
+    "recommendedSauces": [
+      "レモン塩",
+      "柚子胡椒",
+      "塩麹"
+    ],
+    "property": "温性",
+    "taste": "甘・鹹",
+    "memo": "高たんぱく・低脂質で、ぷりぷり食感が楽しめる食材。薬膳では温める食材として扱われることが多く、冷えが気になる日にも合わせやすいです。",
+    "zukanNote": "高たんぱく・低脂質で、ぷりぷり食感が楽しめる食材。薬膳では温める食材として扱われることが多く、冷えが気になる日にも合わせやすいです。",
+    "steamTime": "6〜8分",
+    "sourceMemo": "日本食品標準成分表のえび類を参考に、たんぱく質・低脂質を中心に整理。",
+    "nutritionNames": [
+      "たんぱく質",
+      "低脂質",
+      "ビタミンB12",
+      "亜鉛"
+    ],
+    "nutritionSummary": "体づくり・巡り・体調管理・美肌におすすめ"
+  },
+  {
+    "name": "ししゃも",
+    "category": "タンパク質",
+    "season": "秋",
+    "beautyMain": "美肌",
+    "beautySub": "疲労回復",
+    "yakuzenMain": "巡りケア",
+    "yakuzenSub": "疲労回復",
+    "nutrition": [
+      {
+        "name": "たんぱく質",
+        "benefit": "体づくり"
+      },
+      {
+        "name": "カルシウム",
+        "benefit": "骨・体づくり"
+      },
+      {
+        "name": "ビタミンB12",
+        "benefit": "巡り"
+      },
+      {
+        "name": "ビタミンD",
+        "benefit": "体調管理"
+      }
+    ],
+    "nutritionPoints": [
+      "たんぱく質（体づくり）",
+      "カルシウム（骨・体づくり）",
+      "ビタミンB12（巡り）",
+      "ビタミンD（体調管理）"
+    ],
+    "pairings": [
+      "大根",
+      "キャベツ",
+      "ブロッコリー",
+      "かぼちゃ"
+    ],
+    "recommendedSauces": [
+      "柚子胡椒ポン酢",
+      "ポン酢",
+      "レモン塩"
+    ],
+    "property": "平性",
+    "taste": "甘・鹹",
+    "memo": "丸ごと食べられるため、カルシウムも取り入れやすい魚。せいろで蒸すとふっくらしやすく、大根やキャベツなどさっぱりした野菜とよく合います。",
+    "zukanNote": "丸ごと食べられるため、カルシウムも取り入れやすい魚。せいろで蒸すとふっくらしやすく、大根やキャベツなどさっぱりした野菜とよく合います。",
+    "steamTime": "8〜10分",
+    "sourceMemo": "日本食品標準成分表の小魚類・魚介類の栄養傾向を参考に、カルシウムとビタミンB12を採用。",
+    "nutritionNames": [
+      "たんぱく質",
+      "カルシウム",
+      "ビタミンB12",
+      "ビタミンD"
+    ],
+    "nutritionSummary": "体づくり・骨・巡り・体調管理におすすめ"
+  },
+  {
+    "name": "豆腐",
+    "category": "タンパク質",
+    "season": "通年",
+    "beautyMain": "ダイエット",
+    "beautySub": "二日酔い",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "二日酔い",
+    "nutrition": [
+      {
+        "name": "植物性たんぱく質",
+        "benefit": "体づくり"
+      },
+      {
+        "name": "大豆イソフラボン",
+        "benefit": "美容"
+      },
+      {
+        "name": "カルシウム",
+        "benefit": "骨・体づくり"
+      },
+      {
+        "name": "マグネシウム",
+        "benefit": "体調管理"
+      }
+    ],
+    "nutritionPoints": [
+      "植物性たんぱく質（体づくり）",
+      "大豆イソフラボン（美容）",
+      "カルシウム（骨・体づくり）",
+      "マグネシウム（体調管理）"
+    ],
+    "pairings": [
+      "白菜",
+      "しめじ",
+      "長ねぎ",
+      "大根"
+    ],
+    "recommendedSauces": [
+      "生姜ポン酢",
+      "ポン酢",
+      "ラー油ポン酢"
+    ],
+    "property": "涼性",
+    "taste": "甘",
+    "memo": "軽めに整えたい日に使いやすい植物性たんぱく質。薬膳では豆腐は涼性とされることが多く、熱っぽさや飲みすぎた翌日にさっぱり食べたい時にも向きます。",
+    "zukanNote": "軽めに整えたい日に使いやすい植物性たんぱく質。薬膳では豆腐は涼性とされることが多く、熱っぽさや飲みすぎた翌日にさっぱり食べたい時にも向きます。",
+    "steamTime": "8〜10分",
+    "sourceMemo": "日本食品標準成分表の豆腐類を参考に、植物性たんぱく質と大豆由来成分を中心に整理。",
+    "nutritionNames": [
+      "植物性たんぱく質",
+      "大豆イソフラボン",
+      "カルシウム",
+      "マグネシウム"
+    ],
+    "nutritionSummary": "体づくり・美容・骨・体調管理におすすめ"
+  },
+  {
+    "name": "厚揚げ",
+    "category": "タンパク質",
+    "season": "通年",
+    "beautyMain": "腸活",
+    "beautySub": "ダイエット",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "疲労回復",
+    "nutrition": [
+      {
+        "name": "植物性たんぱく質",
+        "benefit": "体づくり"
+      },
+      {
+        "name": "カルシウム",
+        "benefit": "骨・体づくり"
+      },
+      {
+        "name": "鉄",
+        "benefit": "巡り"
+      },
+      {
+        "name": "脂質",
+        "benefit": "満足感"
+      }
+    ],
+    "nutritionPoints": [
+      "植物性たんぱく質（体づくり）",
+      "カルシウム（骨・体づくり）",
+      "鉄（巡り）",
+      "脂質（満足感）"
+    ],
+    "pairings": [
+      "白菜",
+      "キャベツ",
+      "しめじ",
+      "長ねぎ"
+    ],
+    "recommendedSauces": [
+      "生姜ポン酢",
+      "味噌だれ",
+      "ごまだれ"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "memo": "豆腐より食べ応えがあり、せいろ蒸しの満足感を上げやすい食材。野菜の水分でふっくらしやすく、味噌だれやポン酢とも相性がよいです。",
+    "zukanNote": "豆腐より食べ応えがあり、せいろ蒸しの満足感を上げやすい食材。野菜の水分でふっくらしやすく、味噌だれやポン酢とも相性がよいです。",
+    "steamTime": "10〜12分",
+    "sourceMemo": "日本食品標準成分表の大豆製品を参考に、植物性たんぱく質・カルシウムを採用。",
+    "nutritionNames": [
+      "植物性たんぱく質",
+      "カルシウム",
+      "鉄",
+      "脂質"
+    ],
+    "nutritionSummary": "体づくり・骨・巡り・満足感におすすめ"
+  },
+  {
+    "name": "チーズ",
+    "category": "タンパク質",
+    "season": "通年",
+    "beautyMain": "美肌",
+    "beautySub": "疲労回復",
+    "yakuzenMain": "おまかせ",
+    "yakuzenSub": "おまかせ",
+    "nutrition": [
+      {
+        "name": "たんぱく質",
+        "benefit": "体づくり"
+      },
+      {
+        "name": "カルシウム",
+        "benefit": "骨・体づくり"
+      },
+      {
+        "name": "ビタミンB12",
+        "benefit": "巡り"
+      },
+      {
+        "name": "脂質",
+        "benefit": "満足感"
+      }
+    ],
+    "nutritionPoints": [
+      "たんぱく質（体づくり）",
+      "カルシウム（骨・体づくり）",
+      "ビタミンB12（巡り）",
+      "脂質（満足感）"
+    ],
+    "pairings": [
+      "かぼちゃ",
+      "ブロッコリー",
+      "ミニトマト",
+      "さつまいも"
+    ],
+    "recommendedSauces": [
+      "バター醤油",
+      "ごまだれ",
+      "レモン塩"
+    ],
+    "property": "平性",
+    "taste": "甘・酸",
+    "memo": "蒸し野菜やかぼちゃとの相性がよく、ご褒美感を足したい日に便利。薬膳目的というより、たんぱく質・カルシウムと満足感を補う食材として扱います。",
+    "zukanNote": "蒸し野菜やかぼちゃとの相性がよく、ご褒美感を足したい日に便利。薬膳目的というより、たんぱく質・カルシウムと満足感を補う食材として扱います。",
+    "steamTime": "仕上げに1〜2分",
+    "sourceMemo": "日本食品標準成分表のチーズ類を参考に、カルシウム・たんぱく質を中心に整理。",
+    "nutritionNames": [
+      "たんぱく質",
+      "カルシウム",
+      "ビタミンB12",
+      "脂質"
+    ],
+    "nutritionSummary": "体づくり・骨・巡り・満足感におすすめ"
+  },
+  {
+    "name": "ウインナー",
+    "category": "タンパク質",
+    "season": "通年",
+    "beautyMain": "おまかせ",
+    "beautySub": "おまかせ",
+    "yakuzenMain": "おまかせ",
+    "yakuzenSub": "おまかせ",
+    "nutrition": [
+      {
+        "name": "たんぱく質",
+        "benefit": "体づくり"
+      },
+      {
+        "name": "脂質",
+        "benefit": "満足感"
+      },
+      {
+        "name": "塩分",
+        "benefit": "味の満足感"
+      }
+    ],
+    "nutritionPoints": [
+      "たんぱく質（体づくり）",
+      "脂質（満足感）",
+      "塩分（味の満足感）"
+    ],
+    "pairings": [
+      "キャベツ",
+      "ブロッコリー",
+      "じゃがいも",
+      "白菜"
+    ],
+    "recommendedSauces": [
+      "ポン酢",
+      "粒マスタード",
+      "柚子胡椒"
+    ],
+    "property": "おまかせ",
+    "taste": "おまかせ",
+    "memo": "野菜と一緒に蒸すと手軽に楽しめる食材。美容・薬膳目的で強く推す食材ではなく、満足感を足すご褒美枠として少量使いがおすすめです。",
+    "zukanNote": "野菜と一緒に蒸すと手軽に楽しめる食材。美容・薬膳目的で強く推す食材ではなく、満足感を足すご褒美枠として少量使いがおすすめです。",
+    "steamTime": "8〜10分",
+    "sourceMemo": "加工食品のため、美容・薬膳目的は断定せず、たんぱく質・脂質・塩分を主な特徴として整理。",
+    "nutritionNames": [
+      "たんぱく質",
+      "脂質",
+      "塩分"
+    ],
+    "nutritionSummary": "体づくり・満足感におすすめ"
+  },
+  {
+    "name": "ブロッコリー",
+    "category": "野菜",
+    "season": "冬",
+    "beautyMain": "美肌",
+    "beautySub": "肌荒れケア",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "体調管理",
+    "nutrition": [
+      {
+        "name": "ビタミンC",
+        "benefit": "美容・透明感"
+      },
+      {
+        "name": "β-カロテン",
+        "benefit": "美肌"
+      },
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      },
+      {
+        "name": "葉酸",
+        "benefit": "体づくり"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      }
+    ],
+    "nutritionPoints": [
+      "ビタミンC（美容・透明感）",
+      "β-カロテン（美肌）",
+      "食物繊維（腸活）",
+      "葉酸（体づくり）",
+      "カリウム（むくみ対策）"
+    ],
+    "pairings": [
+      "鶏むね肉",
+      "鮭",
+      "エビ",
+      "卵"
+    ],
+    "recommendedSauces": [
+      "レモン塩",
+      "柚子胡椒ポン酢",
+      "ごまだれ"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "memo": "ビタミンCや葉酸を含む代表的な野菜。薬膳では平性寄りとして扱われることが多く、蒸すと甘みが出て、肉や魚介類とも合わせやすい定番食材です。",
+    "zukanNote": "ビタミンCや葉酸を含む代表的な野菜。薬膳では平性寄りとして扱われることが多く、蒸すと甘みが出て、肉や魚介類とも合わせやすい定番食材です。",
+    "steamTime": "8〜10分",
+    "sourceMemo": "日本食品標準成分表では、ブロッコリー花序・生にビタミンC、葉酸などが掲載されています。",
+    "nutritionNames": [
+      "ビタミンC",
+      "β-カロテン",
+      "食物繊維",
+      "葉酸",
+      "カリウム"
+    ],
+    "nutritionSummary": "美容・透明感・美肌・腸活におすすめ"
+  },
+  {
+    "name": "キャベツ",
+    "category": "野菜",
+    "season": "通年",
+    "beautyMain": "腸活",
+    "beautySub": "二日酔い",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "二日酔い",
+    "nutrition": [
+      {
+        "name": "ビタミンC",
+        "benefit": "美容・透明感"
+      },
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "ビタミンK",
+        "benefit": "体調管理"
+      }
+    ],
+    "nutritionPoints": [
+      "ビタミンC（美容・透明感）",
+      "食物繊維（腸活）",
+      "カリウム（むくみ対策）",
+      "ビタミンK（体調管理）"
+    ],
+    "pairings": [
+      "豚しゃぶ肉",
+      "鶏もも肉",
+      "ウインナー",
+      "しめじ"
+    ],
+    "recommendedSauces": [
+      "ポン酢",
+      "ごまだれ",
+      "味噌だれ"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "memo": "通年使いやすい定番野菜。蒸すとかさが減って甘みが出やすく、胃腸をやさしく整えたい日のかさ増しにも便利です。",
+    "zukanNote": "通年使いやすい定番野菜。蒸すとかさが減って甘みが出やすく、胃腸をやさしく整えたい日のかさ増しにも便利です。",
+    "steamTime": "8〜10分",
+    "sourceMemo": "日本食品標準成分表のキャベツ類を参考に、ビタミンC・食物繊維・カリウムを採用。",
+    "nutritionNames": [
+      "ビタミンC",
+      "食物繊維",
+      "カリウム",
+      "ビタミンK"
+    ],
+    "nutritionSummary": "美容・透明感・腸活・むくみ対策におすすめ"
+  },
+  {
+    "name": "にんじん",
+    "category": "野菜",
+    "season": "秋",
+    "beautyMain": "美肌",
+    "beautySub": "肌荒れケア",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "体調管理",
+    "nutrition": [
+      {
+        "name": "β-カロテン",
+        "benefit": "美肌"
+      },
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "ビタミンC",
+        "benefit": "美容"
+      }
+    ],
+    "nutritionPoints": [
+      "β-カロテン（美肌）",
+      "食物繊維（腸活）",
+      "カリウム（むくみ対策）",
+      "ビタミンC（美容）"
+    ],
+    "pairings": [
+      "鶏むね肉",
+      "鮭",
+      "かぼちゃ",
+      "しめじ"
+    ],
+    "recommendedSauces": [
+      "ごまだれ",
+      "レモン塩",
+      "バター醤油"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "memo": "β-カロテンを代表的に含む緑黄色野菜。蒸すと甘みが出やすく、色味もきれいなので、せいろ蒸しの彩りに使いやすいです。",
+    "zukanNote": "β-カロテンを代表的に含む緑黄色野菜。蒸すと甘みが出やすく、色味もきれいなので、せいろ蒸しの彩りに使いやすいです。",
+    "steamTime": "10〜12分",
+    "sourceMemo": "日本食品標準成分表のにんじん根・生を参考に、β-カロテンを中心に整理。",
+    "nutritionNames": [
+      "β-カロテン",
+      "食物繊維",
+      "カリウム",
+      "ビタミンC"
+    ],
+    "nutritionSummary": "美肌・腸活・むくみ対策・美容におすすめ"
+  },
+  {
+    "name": "かぼちゃ",
+    "category": "炭水化物",
+    "season": "秋",
+    "beautyMain": "美肌",
+    "beautySub": "肌荒れケア",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "疲労回復",
+    "nutrition": [
+      {
+        "name": "β-カロテン",
+        "benefit": "美肌"
+      },
+      {
+        "name": "ビタミンE",
+        "benefit": "美容"
+      },
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "炭水化物",
+        "benefit": "満足感"
+      }
+    ],
+    "nutritionPoints": [
+      "β-カロテン（美肌）",
+      "ビタミンE（美容）",
+      "食物繊維（腸活）",
+      "カリウム（むくみ対策）",
+      "炭水化物（満足感）"
+    ],
+    "pairings": [
+      "鶏もも肉",
+      "チーズ",
+      "くるみ",
+      "ブロッコリー"
+    ],
+    "recommendedSauces": [
+      "ごまだれ",
+      "バター醤油",
+      "塩麹"
+    ],
+    "property": "温性",
+    "taste": "甘",
+    "memo": "甘みがあり、β-カロテンやビタミンEを含む食材。薬膳では胃腸を補う食材として扱われることが多く、満足感を出したい日に向きます。",
+    "zukanNote": "甘みがあり、β-カロテンやビタミンEを含む食材。薬膳では胃腸を補う食材として扱われることが多く、満足感を出したい日に向きます。",
+    "steamTime": "12〜15分",
+    "sourceMemo": "日本食品標準成分表の西洋かぼちゃ・生を参考に、β-カロテン・食物繊維・カリウムを採用。",
+    "nutritionNames": [
+      "β-カロテン",
+      "ビタミンE",
+      "食物繊維",
+      "カリウム",
+      "炭水化物"
+    ],
+    "nutritionSummary": "美肌・美容・腸活・むくみ対策におすすめ"
+  },
+  {
+    "name": "さつまいも",
+    "category": "炭水化物",
+    "season": "秋",
+    "beautyMain": "腸活",
+    "beautySub": "ダイエット",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "疲労回復",
+    "nutrition": [
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      },
+      {
+        "name": "ビタミンC",
+        "benefit": "美容・透明感"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "炭水化物",
+        "benefit": "満足感"
+      }
+    ],
+    "nutritionPoints": [
+      "食物繊維（腸活）",
+      "ビタミンC（美容・透明感）",
+      "カリウム（むくみ対策）",
+      "炭水化物（満足感）"
+    ],
+    "pairings": [
+      "鶏むね肉",
+      "くるみ",
+      "しめじ",
+      "キャベツ"
+    ],
+    "recommendedSauces": [
+      "バター醤油",
+      "ごまだれ",
+      "塩麹"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "memo": "食物繊維と満足感を出しやすい食材。蒸すと甘みが増し、主食寄りにもおやつ寄りにも使えます。",
+    "zukanNote": "食物繊維と満足感を出しやすい食材。蒸すと甘みが増し、主食寄りにもおやつ寄りにも使えます。",
+    "steamTime": "15〜20分",
+    "sourceMemo": "日本食品標準成分表のさつまいも類を参考に、食物繊維・カリウム・ビタミンCを採用。",
+    "nutritionNames": [
+      "食物繊維",
+      "ビタミンC",
+      "カリウム",
+      "炭水化物"
+    ],
+    "nutritionSummary": "腸活・美容・透明感・むくみ対策におすすめ"
+  },
+  {
+    "name": "ミニトマト",
+    "category": "野菜",
+    "season": "夏",
+    "beautyMain": "美肌",
+    "beautySub": "透明感",
+    "yakuzenMain": "夏バテ対策",
+    "yakuzenSub": "胃腸ケア",
+    "nutrition": [
+      {
+        "name": "リコピン",
+        "benefit": "美容・透明感"
+      },
+      {
+        "name": "ビタミンC",
+        "benefit": "美容"
+      },
+      {
+        "name": "β-カロテン",
+        "benefit": "美肌"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      }
+    ],
+    "nutritionPoints": [
+      "リコピン（美容・透明感）",
+      "ビタミンC（美容）",
+      "β-カロテン（美肌）",
+      "カリウム（むくみ対策）"
+    ],
+    "pairings": [
+      "エビ",
+      "ブロッコリー",
+      "チーズ",
+      "鶏むね肉"
+    ],
+    "recommendedSauces": [
+      "レモン塩",
+      "大葉ポン酢",
+      "ゆずポン酢"
+    ],
+    "property": "涼性",
+    "taste": "甘・酸",
+    "memo": "丸ごと蒸せて甘みが増すため、せいろ蒸しに使いやすい食材。水分と酸味があり、暑い日やさっぱり食べたい日に向きます。",
+    "zukanNote": "丸ごと蒸せて甘みが増すため、せいろ蒸しに使いやすい食材。水分と酸味があり、暑い日やさっぱり食べたい日に向きます。",
+    "steamTime": "4〜6分",
+    "sourceMemo": "トマト類の食品成分データを参考に、リコピン・ビタミンC・β-カロテンを採用。",
+    "nutritionNames": [
+      "リコピン",
+      "ビタミンC",
+      "β-カロテン",
+      "カリウム"
+    ],
+    "nutritionSummary": "美容・透明感・美肌・むくみ対策におすすめ"
+  },
+  {
+    "name": "アスパラガス",
+    "category": "野菜",
+    "season": "春",
+    "beautyMain": "むくみ対策",
+    "beautySub": "疲労回復",
+    "yakuzenMain": "疲労回復",
+    "yakuzenSub": "むくみ対策",
+    "nutrition": [
+      {
+        "name": "葉酸",
+        "benefit": "体づくり"
+      },
+      {
+        "name": "アスパラギン酸",
+        "benefit": "疲労回復"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      }
+    ],
+    "nutritionPoints": [
+      "葉酸（体づくり）",
+      "アスパラギン酸（疲労回復）",
+      "カリウム（むくみ対策）",
+      "食物繊維（腸活）"
+    ],
+    "pairings": [
+      "エビ",
+      "鶏むね肉",
+      "鮭",
+      "ミニトマト"
+    ],
+    "recommendedSauces": [
+      "レモン塩",
+      "柚子胡椒ポン酢",
+      "塩麹"
+    ],
+    "property": "平性",
+    "taste": "甘・苦",
+    "memo": "春らしい甘みと食感が楽しめる野菜。短時間で蒸し上がり、魚介や鶏肉と合わせると彩りのよいせいろになります。",
+    "zukanNote": "春らしい甘みと食感が楽しめる野菜。短時間で蒸し上がり、魚介や鶏肉と合わせると彩りのよいせいろになります。",
+    "steamTime": "6〜8分",
+    "sourceMemo": "日本食品標準成分表のアスパラガス類を参考に、葉酸・カリウムなどを採用。",
+    "nutritionNames": [
+      "葉酸",
+      "アスパラギン酸",
+      "カリウム",
+      "食物繊維"
+    ],
+    "nutritionSummary": "体づくり・疲労回復・むくみ対策・腸活におすすめ"
+  },
+  {
+    "name": "長ねぎ",
+    "category": "野菜",
+    "season": "冬",
+    "beautyMain": "冷え対策",
+    "beautySub": "疲労回復",
+    "yakuzenMain": "風邪予防",
+    "yakuzenSub": "冷え対策",
+    "nutrition": [
+      {
+        "name": "香り成分",
+        "benefit": "気分転換"
+      },
+      {
+        "name": "ビタミンC",
+        "benefit": "体調管理"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      }
+    ],
+    "nutritionPoints": [
+      "香り成分（気分転換）",
+      "ビタミンC（体調管理）",
+      "カリウム（むくみ対策）",
+      "食物繊維（腸活）"
+    ],
+    "pairings": [
+      "鶏もも肉",
+      "豆腐",
+      "豚しゃぶ肉",
+      "白菜"
+    ],
+    "recommendedSauces": [
+      "生姜ポン酢",
+      "味噌だれ",
+      "柚子胡椒"
+    ],
+    "property": "温性",
+    "taste": "辛",
+    "memo": "薬膳では温性・辛味の食材として扱われることが多く、冷えが気になる日や冬のせいろ蒸しに使いやすい香味野菜です。",
+    "zukanNote": "薬膳では温性・辛味の食材として扱われることが多く、冷えが気になる日や冬のせいろ蒸しに使いやすい香味野菜です。",
+    "steamTime": "8〜10分",
+    "sourceMemo": "日本食品標準成分表のねぎ類を参考に、ビタミンC・カリウム・食物繊維を採用。",
+    "nutritionNames": [
+      "香り成分",
+      "ビタミンC",
+      "カリウム",
+      "食物繊維"
+    ],
+    "nutritionSummary": "気分転換・体調管理・むくみ対策・腸活におすすめ"
+  },
+  {
+    "name": "大根",
+    "category": "野菜",
+    "season": "冬",
+    "beautyMain": "二日酔い",
+    "beautySub": "むくみ対策",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "二日酔い",
+    "nutrition": [
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "ビタミンC",
+        "benefit": "体調管理"
+      },
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      },
+      {
+        "name": "消化を助ける酵素",
+        "benefit": "胃腸ケア"
+      }
+    ],
+    "nutritionPoints": [
+      "カリウム（むくみ対策）",
+      "ビタミンC（体調管理）",
+      "食物繊維（腸活）",
+      "消化を助ける酵素（胃腸ケア）"
+    ],
+    "pairings": [
+      "ししゃも",
+      "豆腐",
+      "鶏もも肉",
+      "白菜"
+    ],
+    "recommendedSauces": [
+      "ポン酢",
+      "生姜ポン酢",
+      "柚子胡椒ポン酢"
+    ],
+    "property": "涼性",
+    "taste": "辛・甘",
+    "memo": "蒸すと甘みが出て、魚や豆腐と合わせやすい食材。消化酵素は加熱で働きが弱くなるため、胃腸ケアを意識する日は大根おろしを添えるのもおすすめです。",
+    "zukanNote": "蒸すと甘みが出て、魚や豆腐と合わせやすい食材。消化酵素は加熱で働きが弱くなるため、胃腸ケアを意識する日は大根おろしを添えるのもおすすめです。",
+    "steamTime": "12〜15分",
+    "sourceMemo": "日本食品標準成分表のだいこん根・生を参考に、カリウム・ビタミンC・食物繊維を採用。",
+    "nutritionNames": [
+      "カリウム",
+      "ビタミンC",
+      "食物繊維",
+      "消化を助ける酵素"
+    ],
+    "nutritionSummary": "むくみ対策・体調管理・腸活・胃腸ケアにおすすめ"
+  },
+  {
+    "name": "白菜",
+    "category": "野菜",
+    "season": "冬",
+    "beautyMain": "ダイエット",
+    "beautySub": "二日酔い",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "二日酔い",
+    "nutrition": [
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "ビタミンC",
+        "benefit": "体調管理"
+      },
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      },
+      {
+        "name": "葉酸",
+        "benefit": "体づくり"
+      }
+    ],
+    "nutritionPoints": [
+      "カリウム（むくみ対策）",
+      "ビタミンC（体調管理）",
+      "食物繊維（腸活）",
+      "葉酸（体づくり）"
+    ],
+    "pairings": [
+      "豚しゃぶ肉",
+      "豆腐",
+      "鶏もも肉",
+      "しめじ"
+    ],
+    "recommendedSauces": [
+      "生姜ポン酢",
+      "ポン酢",
+      "味噌だれ"
+    ],
+    "property": "涼性",
+    "taste": "甘",
+    "memo": "水分が多く、蒸すとかさが減ってたっぷり食べやすい冬野菜。薬膳では涼性寄りとして扱われることが多く、重たくない蒸しごはんに向きます。",
+    "zukanNote": "水分が多く、蒸すとかさが減ってたっぷり食べやすい冬野菜。薬膳では涼性寄りとして扱われることが多く、重たくない蒸しごはんに向きます。",
+    "steamTime": "8〜10分",
+    "sourceMemo": "日本食品標準成分表のはくさい類を参考に、カリウム・ビタミンC・食物繊維を採用。",
+    "nutritionNames": [
+      "カリウム",
+      "ビタミンC",
+      "食物繊維",
+      "葉酸"
+    ],
+    "nutritionSummary": "むくみ対策・体調管理・腸活・体づくりにおすすめ"
+  },
+  {
+    "name": "しめじ",
+    "category": "きのこ",
+    "season": "秋",
+    "beautyMain": "腸活",
+    "beautySub": "二日酔い",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "二日酔い",
+    "nutrition": [
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      },
+      {
+        "name": "ビタミンB群",
+        "benefit": "疲労回復"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "低カロリー",
+        "benefit": "軽め"
+      }
+    ],
+    "nutritionPoints": [
+      "食物繊維（腸活）",
+      "ビタミンB群（疲労回復）",
+      "カリウム（むくみ対策）",
+      "低カロリー（軽め）"
+    ],
+    "pairings": [
+      "鶏むね肉",
+      "豚しゃぶ肉",
+      "白菜",
+      "じゃがいも"
+    ],
+    "recommendedSauces": [
+      "ポン酢",
+      "バター醤油",
+      "生姜ポン酢"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "memo": "クセが少なく、肉・魚・野菜のどれにも合わせやすいきのこ。食物繊維を取り入れたい日や、軽めに満足感を出したい日に使いやすいです。",
+    "zukanNote": "クセが少なく、肉・魚・野菜のどれにも合わせやすいきのこ。食物繊維を取り入れたい日や、軽めに満足感を出したい日に使いやすいです。",
+    "steamTime": "6〜8分",
+    "sourceMemo": "日本食品標準成分表のきのこ類を参考に、食物繊維・ビタミンB群・カリウムを代表栄養素として整理。",
+    "nutritionNames": [
+      "食物繊維",
+      "ビタミンB群",
+      "カリウム",
+      "低カロリー"
+    ],
+    "nutritionSummary": "腸活・疲労回復・むくみ対策・二日酔いにおすすめ"
+  },
+  {
+    "name": "えのき",
+    "category": "きのこ",
+    "season": "冬",
+    "beautyMain": "ダイエット",
+    "beautySub": "腸活",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "むくみ対策",
+    "nutrition": [
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      },
+      {
+        "name": "ビタミンB1",
+        "benefit": "疲労回復"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "低カロリー",
+        "benefit": "軽め"
+      }
+    ],
+    "nutritionPoints": [
+      "食物繊維（腸活）",
+      "ビタミンB1（疲労回復）",
+      "カリウム（むくみ対策）",
+      "低カロリー（軽め）"
+    ],
+    "pairings": [
+      "豆腐",
+      "白菜",
+      "豚しゃぶ肉",
+      "長ねぎ"
+    ],
+    "recommendedSauces": [
+      "ポン酢",
+      "ラー油ポン酢",
+      "生姜ポン酢"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "memo": "細く火が通りやすく、かさ増しにも便利なきのこ。水分が出やすい野菜や豆腐と合わせると、軽めのせいろ蒸しになります。",
+    "zukanNote": "細く火が通りやすく、かさ増しにも便利なきのこ。水分が出やすい野菜や豆腐と合わせると、軽めのせいろ蒸しになります。",
+    "steamTime": "5〜7分",
+    "sourceMemo": "日本食品標準成分表のえのきたけ類を参考に、食物繊維・ビタミンB1・カリウムを採用。",
+    "nutritionNames": [
+      "食物繊維",
+      "ビタミンB1",
+      "カリウム",
+      "低カロリー"
+    ],
+    "nutritionSummary": "腸活・疲労回復・むくみ対策・ダイエットにおすすめ"
+  },
+  {
+    "name": "エリンギ",
+    "category": "きのこ",
+    "season": "秋",
+    "beautyMain": "ダイエット",
+    "beautySub": "腸活",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "疲労回復",
+    "nutrition": [
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "ナイアシン",
+        "benefit": "エネルギー代謝"
+      },
+      {
+        "name": "低カロリー",
+        "benefit": "軽め"
+      }
+    ],
+    "nutritionPoints": [
+      "食物繊維（腸活）",
+      "カリウム（むくみ対策）",
+      "ナイアシン（エネルギー代謝）",
+      "低カロリー（軽め）"
+    ],
+    "pairings": [
+      "鶏むね肉",
+      "鮭",
+      "ブロッコリー",
+      "じゃがいも"
+    ],
+    "recommendedSauces": [
+      "バター醤油",
+      "柚子胡椒ポン酢",
+      "塩麹"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "memo": "歯ごたえがあり、少量でも満足感を出しやすいきのこ。縦に裂いて蒸すと食感が残り、肉や魚の付け合わせにも向きます。",
+    "zukanNote": "歯ごたえがあり、少量でも満足感を出しやすいきのこ。縦に裂いて蒸すと食感が残り、肉や魚の付け合わせにも向きます。",
+    "steamTime": "6〜8分",
+    "sourceMemo": "日本食品標準成分表のエリンギ類を参考に、食物繊維・カリウム・ナイアシンを採用。",
+    "nutritionNames": [
+      "食物繊維",
+      "カリウム",
+      "ナイアシン",
+      "低カロリー"
+    ],
+    "nutritionSummary": "腸活・むくみ対策・疲労回復・ダイエットにおすすめ"
+  },
+  {
+    "name": "まいたけ",
+    "category": "きのこ",
+    "season": "秋",
+    "beautyMain": "腸活",
+    "beautySub": "美肌",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "体調管理",
+    "nutrition": [
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      },
+      {
+        "name": "ビタミンD",
+        "benefit": "体調管理"
+      },
+      {
+        "name": "ナイアシン",
+        "benefit": "疲労回復"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      }
+    ],
+    "nutritionPoints": [
+      "食物繊維（腸活）",
+      "ビタミンD（体調管理）",
+      "ナイアシン（疲労回復）",
+      "カリウム（むくみ対策）"
+    ],
+    "pairings": [
+      "鶏もも肉",
+      "豚しゃぶ肉",
+      "鮭",
+      "かぼちゃ"
+    ],
+    "recommendedSauces": [
+      "ポン酢",
+      "バター醤油",
+      "味噌だれ"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "memo": "香りとうま味が強く、せいろ蒸し全体の満足感を上げてくれるきのこ。薬膳ではきのこ類は胃腸を助ける食材として扱われることが多いです。",
+    "zukanNote": "香りとうま味が強く、せいろ蒸し全体の満足感を上げてくれるきのこ。薬膳ではきのこ類は胃腸を助ける食材として扱われることが多いです。",
+    "steamTime": "6〜8分",
+    "sourceMemo": "日本食品標準成分表のまいたけ類を参考に、食物繊維・ビタミンD・ナイアシンを採用。",
+    "nutritionNames": [
+      "食物繊維",
+      "ビタミンD",
+      "ナイアシン",
+      "カリウム"
+    ],
+    "nutritionSummary": "腸活・体調管理・疲労回復・むくみ対策におすすめ"
+  },
+  {
+    "name": "しいたけ",
+    "category": "きのこ",
+    "season": "秋",
+    "beautyMain": "疲労回復",
+    "beautySub": "肌荒れケア",
+    "yakuzenMain": "体調管理",
+    "yakuzenSub": "疲労回復",
+    "nutrition": [
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      },
+      {
+        "name": "ビタミンD",
+        "benefit": "体調管理"
+      },
+      {
+        "name": "グアニル酸",
+        "benefit": "うま味"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      }
+    ],
+    "nutritionPoints": [
+      "食物繊維（腸活）",
+      "ビタミンD（体調管理）",
+      "グアニル酸（うま味）",
+      "カリウム（むくみ対策）"
+    ],
+    "pairings": [
+      "鶏むね肉",
+      "厚揚げ",
+      "長ねぎ",
+      "白菜"
+    ],
+    "recommendedSauces": [
+      "ポン酢",
+      "塩麹",
+      "にんにく醤油"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "memo": "うま味が強く、肉や豆腐と合わせると満足感が出やすい定番きのこ。軸も薄く切れば蒸して食べられます。",
+    "zukanNote": "うま味が強く、肉や豆腐と合わせると満足感が出やすい定番きのこ。軸も薄く切れば蒸して食べられます。",
+    "steamTime": "6〜8分",
+    "sourceMemo": "日本食品標準成分表のしいたけ類を参考に、食物繊維・ビタミンDを代表栄養素として整理。",
+    "nutritionNames": [
+      "食物繊維",
+      "ビタミンD",
+      "グアニル酸",
+      "カリウム"
+    ],
+    "nutritionSummary": "腸活・体調管理・むくみ対策・疲労回復におすすめ"
+  },
+  {
+    "name": "もやし",
+    "category": "野菜",
+    "season": "通年",
+    "beautyMain": "ダイエット",
+    "beautySub": "疲労回復",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "むくみ対策",
+    "nutrition": [
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "ビタミンC",
+        "benefit": "体調管理"
+      },
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      },
+      {
+        "name": "低カロリー",
+        "benefit": "軽め"
+      }
+    ],
+    "nutritionPoints": [
+      "カリウム（むくみ対策）",
+      "ビタミンC（体調管理）",
+      "食物繊維（腸活）",
+      "低カロリー（軽め）"
+    ],
+    "pairings": [
+      "豚しゃぶ肉",
+      "豆腐",
+      "えのき",
+      "キャベツ"
+    ],
+    "recommendedSauces": [
+      "ポン酢",
+      "ラー油ポン酢",
+      "ごまだれ"
+    ],
+    "property": "涼性",
+    "taste": "甘",
+    "memo": "低コストでかさ増ししやすく、短時間で火が通る野菜。水分が出やすいので、肉や豆腐と重ねて蒸すと食べやすいです。",
+    "zukanNote": "低コストでかさ増ししやすく、短時間で火が通る野菜。水分が出やすいので、肉や豆腐と重ねて蒸すと食べやすいです。",
+    "steamTime": "4〜6分",
+    "sourceMemo": "日本食品標準成分表のもやし類を参考に、低カロリー・カリウム・食物繊維を中心に整理。",
+    "nutritionNames": [
+      "カリウム",
+      "ビタミンC",
+      "食物繊維",
+      "低カロリー"
+    ],
+    "nutritionSummary": "むくみ対策・体調管理・腸活・ダイエットにおすすめ"
+  },
+  {
+    "name": "小松菜",
+    "category": "野菜",
+    "season": "冬",
+    "beautyMain": "肌荒れケア",
+    "beautySub": "透明感",
+    "yakuzenMain": "体調管理",
+    "yakuzenSub": "巡りケア",
+    "nutrition": [
+      {
+        "name": "β-カロテン",
+        "benefit": "美肌"
+      },
+      {
+        "name": "カルシウム",
+        "benefit": "骨・体づくり"
+      },
+      {
+        "name": "鉄",
+        "benefit": "巡り"
+      },
+      {
+        "name": "ビタミンC",
+        "benefit": "美容・透明感"
+      },
+      {
+        "name": "葉酸",
+        "benefit": "体づくり"
+      }
+    ],
+    "nutritionPoints": [
+      "β-カロテン（美肌）",
+      "カルシウム（骨・体づくり）",
+      "鉄（巡り）",
+      "ビタミンC（美容・透明感）",
+      "葉酸（体づくり）"
+    ],
+    "pairings": [
+      "厚揚げ",
+      "鮭",
+      "しめじ",
+      "卵"
+    ],
+    "recommendedSauces": [
+      "ポン酢",
+      "塩麹",
+      "ごまだれ"
+    ],
+    "property": "涼性",
+    "taste": "甘・辛",
+    "memo": "カルシウムやβ-カロテンを含む、使いやすい青菜。蒸すとかさが減り、厚揚げや魚と合わせると栄養バランスが取りやすいです。",
+    "zukanNote": "カルシウムやβ-カロテンを含む、使いやすい青菜。蒸すとかさが減り、厚揚げや魚と合わせると栄養バランスが取りやすいです。",
+    "steamTime": "5〜7分",
+    "sourceMemo": "日本食品標準成分表のこまつな葉・生を参考に、カルシウム・鉄・β-カロテンを採用。",
+    "nutritionNames": [
+      "β-カロテン",
+      "カルシウム",
+      "鉄",
+      "ビタミンC",
+      "葉酸"
+    ],
+    "nutritionSummary": "美肌・骨・体づくり・巡りにおすすめ"
+  },
+  {
+    "name": "ほうれん草",
+    "category": "野菜",
+    "season": "冬",
+    "beautyMain": "肌荒れケア",
+    "beautySub": "美肌",
+    "yakuzenMain": "巡りケア",
+    "yakuzenSub": "疲労回復",
+    "nutrition": [
+      {
+        "name": "β-カロテン",
+        "benefit": "美肌"
+      },
+      {
+        "name": "葉酸",
+        "benefit": "体づくり"
+      },
+      {
+        "name": "鉄",
+        "benefit": "巡り"
+      },
+      {
+        "name": "ビタミンC",
+        "benefit": "美容"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      }
+    ],
+    "nutritionPoints": [
+      "β-カロテン（美肌）",
+      "葉酸（体づくり）",
+      "鉄（巡り）",
+      "ビタミンC（美容）",
+      "カリウム（むくみ対策）"
+    ],
+    "pairings": [
+      "卵",
+      "鮭",
+      "しめじ",
+      "厚揚げ"
+    ],
+    "recommendedSauces": [
+      "ごまだれ",
+      "塩麹",
+      "ポン酢"
+    ],
+    "property": "涼性",
+    "taste": "甘",
+    "memo": "葉酸やβ-カロテンを含む青菜。薬膳では血を補うイメージで扱われることがあり、巡りを意識したい日の副菜にも使いやすいです。",
+    "zukanNote": "葉酸やβ-カロテンを含む青菜。薬膳では血を補うイメージで扱われることがあり、巡りを意識したい日の副菜にも使いやすいです。",
+    "steamTime": "5〜7分",
+    "sourceMemo": "日本食品標準成分表のほうれんそう葉・生を参考に、β-カロテン・葉酸・鉄を採用。",
+    "nutritionNames": [
+      "β-カロテン",
+      "葉酸",
+      "鉄",
+      "ビタミンC",
+      "カリウム"
+    ],
+    "nutritionSummary": "美肌・体づくり・巡り・美容におすすめ"
+  },
+  {
+    "name": "水菜",
+    "category": "野菜",
+    "season": "冬",
+    "beautyMain": "ダイエット",
+    "beautySub": "透明感",
+    "yakuzenMain": "むくみ対策",
+    "yakuzenSub": "胃腸ケア",
+    "nutrition": [
+      {
+        "name": "ビタミンC",
+        "benefit": "美容・透明感"
+      },
+      {
+        "name": "カルシウム",
+        "benefit": "骨・体づくり"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      }
+    ],
+    "nutritionPoints": [
+      "ビタミンC（美容・透明感）",
+      "カルシウム（骨・体づくり）",
+      "カリウム（むくみ対策）",
+      "食物繊維（腸活）"
+    ],
+    "pairings": [
+      "豆腐",
+      "豚しゃぶ肉",
+      "しめじ",
+      "大根"
+    ],
+    "recommendedSauces": [
+      "ポン酢",
+      "大葉ポン酢",
+      "生姜ポン酢"
+    ],
+    "property": "涼性",
+    "taste": "辛・甘",
+    "memo": "短時間で火が通り、さっぱり食べやすい葉物野菜。蒸しすぎると食感が弱くなるので、仕上げに近いタイミングで入れるのがおすすめです。",
+    "zukanNote": "短時間で火が通り、さっぱり食べやすい葉物野菜。蒸しすぎると食感が弱くなるので、仕上げに近いタイミングで入れるのがおすすめです。",
+    "steamTime": "3〜5分",
+    "sourceMemo": "日本食品標準成分表のみずな葉・生を参考に、ビタミンC・カルシウム・カリウムを採用。",
+    "nutritionNames": [
+      "ビタミンC",
+      "カルシウム",
+      "カリウム",
+      "食物繊維"
+    ],
+    "nutritionSummary": "美容・透明感・骨・体づくりにおすすめ"
+  },
+  {
+    "name": "チンゲンサイ",
+    "category": "野菜",
+    "season": "秋",
+    "beautyMain": "透明感",
+    "beautySub": "ダイエット",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "むくみ対策",
+    "nutrition": [
+      {
+        "name": "β-カロテン",
+        "benefit": "美肌"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "カルシウム",
+        "benefit": "骨・体づくり"
+      },
+      {
+        "name": "ビタミンC",
+        "benefit": "美容"
+      }
+    ],
+    "nutritionPoints": [
+      "β-カロテン（美肌）",
+      "カリウム（むくみ対策）",
+      "カルシウム（骨・体づくり）",
+      "ビタミンC（美容）"
+    ],
+    "pairings": [
+      "エビ",
+      "豚しゃぶ肉",
+      "しいたけ",
+      "豆腐"
+    ],
+    "recommendedSauces": [
+      "生姜ポン酢",
+      "ラー油ポン酢",
+      "塩麹"
+    ],
+    "property": "涼性",
+    "taste": "甘",
+    "memo": "クセが少なく、中華風の味つけとも合う青菜。エビや豚しゃぶ肉と合わせると、軽めでも満足感のあるせいろ蒸しになります。",
+    "zukanNote": "クセが少なく、中華風の味つけとも合う青菜。エビや豚しゃぶ肉と合わせると、軽めでも満足感のあるせいろ蒸しになります。",
+    "steamTime": "5〜7分",
+    "sourceMemo": "日本食品標準成分表のチンゲンサイ葉・生を参考に、β-カロテン・カリウム・カルシウムを採用。",
+    "nutritionNames": [
+      "β-カロテン",
+      "カリウム",
+      "カルシウム",
+      "ビタミンC"
+    ],
+    "nutritionSummary": "美肌・むくみ対策・骨・体づくりにおすすめ"
+  },
+  {
+    "name": "豆苗",
+    "category": "野菜",
+    "season": "通年",
+    "beautyMain": "美肌",
+    "beautySub": "ダイエット",
+    "yakuzenMain": "体調管理",
+    "yakuzenSub": "巡りケア",
+    "nutrition": [
+      {
+        "name": "β-カロテン",
+        "benefit": "美肌"
+      },
+      {
+        "name": "ビタミンC",
+        "benefit": "美容・透明感"
+      },
+      {
+        "name": "葉酸",
+        "benefit": "体づくり"
+      },
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      }
+    ],
+    "nutritionPoints": [
+      "β-カロテン（美肌）",
+      "ビタミンC（美容・透明感）",
+      "葉酸（体づくり）",
+      "食物繊維（腸活）"
+    ],
+    "pairings": [
+      "鶏むね肉",
+      "豚しゃぶ肉",
+      "豆腐",
+      "えのき"
+    ],
+    "recommendedSauces": [
+      "ポン酢",
+      "生姜ポン酢",
+      "ごまだれ"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "memo": "彩りと栄養感を足しやすく、短時間で火が通る野菜。蒸しすぎるとしんなりしすぎるので、最後に加えると食感が残りやすいです。",
+    "zukanNote": "彩りと栄養感を足しやすく、短時間で火が通る野菜。蒸しすぎるとしんなりしすぎるので、最後に加えると食感が残りやすいです。",
+    "steamTime": "3〜5分",
+    "sourceMemo": "日本食品標準成分表の豆苗類を参考に、β-カロテン・ビタミンC・葉酸を採用。",
+    "nutritionNames": [
+      "β-カロテン",
+      "ビタミンC",
+      "葉酸",
+      "食物繊維"
+    ],
+    "nutritionSummary": "美肌・美容・透明感・体づくりにおすすめ"
+  },
+  {
+    "name": "オクラ",
+    "category": "野菜",
+    "season": "夏",
+    "beautyMain": "腸活",
+    "beautySub": "むくみ対策",
+    "yakuzenMain": "夏バテ対策",
+    "yakuzenSub": "胃腸ケア",
+    "nutrition": [
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "葉酸",
+        "benefit": "体づくり"
+      },
+      {
+        "name": "β-カロテン",
+        "benefit": "美肌"
+      }
+    ],
+    "nutritionPoints": [
+      "食物繊維（腸活）",
+      "カリウム（むくみ対策）",
+      "葉酸（体づくり）",
+      "β-カロテン（美肌）"
+    ],
+    "pairings": [
+      "鶏むね肉",
+      "エビ",
+      "ミニトマト",
+      "豆腐"
+    ],
+    "recommendedSauces": [
+      "レモン塩",
+      "大葉ポン酢",
+      "柚子胡椒ポン酢"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "memo": "ねばねば食感で、暑い日にも食べやすい夏野菜。薬膳では胃腸を助ける食材として扱われることがあり、軽めのせいろに向きます。",
+    "zukanNote": "ねばねば食感で、暑い日にも食べやすい夏野菜。薬膳では胃腸を助ける食材として扱われることがあり、軽めのせいろに向きます。",
+    "steamTime": "5〜7分",
+    "sourceMemo": "日本食品標準成分表のオクラ果実・生を参考に、食物繊維・カリウム・葉酸を採用。",
+    "nutritionNames": [
+      "食物繊維",
+      "カリウム",
+      "葉酸",
+      "β-カロテン"
+    ],
+    "nutritionSummary": "腸活・むくみ対策・体づくり・美肌におすすめ"
+  },
+  {
+    "name": "れんこん",
+    "category": "野菜",
+    "season": "秋",
+    "beautyMain": "腸活",
+    "beautySub": "肌荒れケア",
+    "yakuzenMain": "巡りケア",
+    "yakuzenSub": "胃腸ケア",
+    "nutrition": [
+      {
+        "name": "ビタミンC",
+        "benefit": "美容・透明感"
+      },
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "ポリフェノール",
+        "benefit": "美容"
+      }
+    ],
+    "nutritionPoints": [
+      "ビタミンC（美容・透明感）",
+      "食物繊維（腸活）",
+      "カリウム（むくみ対策）",
+      "ポリフェノール（美容）"
+    ],
+    "pairings": [
+      "鶏むね肉",
+      "豚しゃぶ肉",
+      "しめじ",
+      "にんじん"
+    ],
+    "recommendedSauces": [
+      "味噌だれ",
+      "柚子胡椒ポン酢",
+      "ごまだれ"
+    ],
+    "property": "涼性",
+    "taste": "甘",
+    "memo": "シャキッとした食感があり、せいろ蒸しに満足感を足してくれる根菜。薬膳では潤しや巡りを意識する食材として扱われることがあります。",
+    "zukanNote": "シャキッとした食感があり、せいろ蒸しに満足感を足してくれる根菜。薬膳では潤しや巡りを意識する食材として扱われることがあります。",
+    "steamTime": "10〜12分",
+    "sourceMemo": "日本食品標準成分表のれんこん根茎・生を参考に、ビタミンC・食物繊維・カリウムを採用。",
+    "nutritionNames": [
+      "ビタミンC",
+      "食物繊維",
+      "カリウム",
+      "ポリフェノール"
+    ],
+    "nutritionSummary": "美容・透明感・腸活・むくみ対策におすすめ"
+  },
+  {
+    "name": "ごぼう",
+    "category": "野菜",
+    "season": "秋",
+    "beautyMain": "腸活",
+    "beautySub": "ダイエット",
+    "yakuzenMain": "巡りケア",
+    "yakuzenSub": "胃腸ケア",
+    "nutrition": [
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      },
+      {
+        "name": "ポリフェノール",
+        "benefit": "美容"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "炭水化物",
+        "benefit": "満足感"
+      }
+    ],
+    "nutritionPoints": [
+      "食物繊維（腸活）",
+      "ポリフェノール（美容）",
+      "カリウム（むくみ対策）",
+      "炭水化物（満足感）"
+    ],
+    "pairings": [
+      "豚しゃぶ肉",
+      "鶏もも肉",
+      "にんじん",
+      "しめじ"
+    ],
+    "recommendedSauces": [
+      "味噌だれ",
+      "ごまだれ",
+      "生姜ポン酢"
+    ],
+    "property": "寒性",
+    "taste": "苦・甘",
+    "memo": "食物繊維をしっかり取り入れたい日に使いやすい根菜。薄切りにすると火が通りやすく、肉と合わせると食べ応えが出ます。",
+    "zukanNote": "食物繊維をしっかり取り入れたい日に使いやすい根菜。薄切りにすると火が通りやすく、肉と合わせると食べ応えが出ます。",
+    "steamTime": "10〜12分",
+    "sourceMemo": "日本食品標準成分表のごぼう根・生を参考に、食物繊維・カリウムを中心に整理。",
+    "nutritionNames": [
+      "食物繊維",
+      "ポリフェノール",
+      "カリウム",
+      "炭水化物"
+    ],
+    "nutritionSummary": "腸活・美容・むくみ対策・満足感におすすめ"
+  },
+  {
+    "name": "じゃがいも",
+    "category": "炭水化物",
+    "season": "通年",
+    "beautyMain": "疲労回復",
+    "beautySub": "ダイエット",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "疲労回復",
+    "nutrition": [
+      {
+        "name": "炭水化物",
+        "benefit": "満足感"
+      },
+      {
+        "name": "ビタミンC",
+        "benefit": "美容"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      }
+    ],
+    "nutritionPoints": [
+      "炭水化物（満足感）",
+      "ビタミンC（美容）",
+      "カリウム（むくみ対策）",
+      "食物繊維（腸活）"
+    ],
+    "pairings": [
+      "鮭",
+      "ブロッコリー",
+      "エリンギ",
+      "チーズ"
+    ],
+    "recommendedSauces": [
+      "バター醤油",
+      "塩麹",
+      "柚子胡椒"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "memo": "満足感を出したい日に便利ないも類。蒸すとほくほくになり、魚・きのこ・チーズとも合わせやすいです。",
+    "zukanNote": "満足感を出したい日に便利ないも類。蒸すとほくほくになり、魚・きのこ・チーズとも合わせやすいです。",
+    "steamTime": "15〜20分",
+    "sourceMemo": "日本食品標準成分表のじゃがいも塊茎・生を参考に、炭水化物・カリウム・ビタミンCを採用。",
+    "nutritionNames": [
+      "炭水化物",
+      "ビタミンC",
+      "カリウム",
+      "食物繊維"
+    ],
+    "nutritionSummary": "満足感・美容・むくみ対策・腸活におすすめ"
+  },
+  {
+    "name": "玉ねぎ",
+    "category": "野菜",
+    "season": "通年",
+    "beautyMain": "疲労回復",
+    "beautySub": "腸活",
+    "yakuzenMain": "巡りケア",
+    "yakuzenSub": "胃腸ケア",
+    "nutrition": [
+      {
+        "name": "硫化アリル",
+        "benefit": "巡り・疲労回復"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      },
+      {
+        "name": "オリゴ糖",
+        "benefit": "腸活"
+      }
+    ],
+    "nutritionPoints": [
+      "硫化アリル（巡り・疲労回復）",
+      "カリウム（むくみ対策）",
+      "食物繊維（腸活）",
+      "オリゴ糖（腸活）"
+    ],
+    "pairings": [
+      "豚しゃぶ肉",
+      "鶏もも肉",
+      "鮭",
+      "しめじ"
+    ],
+    "recommendedSauces": [
+      "ポン酢",
+      "味噌だれ",
+      "バター醤油"
+    ],
+    "property": "温性",
+    "taste": "辛・甘",
+    "memo": "蒸すと甘みが増し、肉や魚とも合わせやすい定番野菜。薬膳では巡りを意識する食材として扱われることがあります。",
+    "zukanNote": "蒸すと甘みが増し、肉や魚とも合わせやすい定番野菜。薬膳では巡りを意識する食材として扱われることがあります。",
+    "steamTime": "10〜12分",
+    "sourceMemo": "日本食品標準成分表のたまねぎりん茎・生を参考に、カリウム・食物繊維を中心に整理。硫化アリルは香味成分として扱う。",
+    "nutritionNames": [
+      "硫化アリル",
+      "カリウム",
+      "食物繊維",
+      "オリゴ糖"
+    ],
+    "nutritionSummary": "巡り・疲労回復・むくみ対策・腸活におすすめ"
+  },
+  {
+    "name": "パプリカ赤",
+    "category": "野菜",
+    "season": "夏",
+    "beautyMain": "透明感",
+    "beautySub": "肌荒れケア",
+    "yakuzenMain": "体調管理",
+    "yakuzenSub": "夏バテ対策",
+    "nutrition": [
+      {
+        "name": "ビタミンC",
+        "benefit": "美容・透明感"
+      },
+      {
+        "name": "β-カロテン",
+        "benefit": "美肌"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "ビタミンE",
+        "benefit": "美容"
+      }
+    ],
+    "nutritionPoints": [
+      "ビタミンC（美容・透明感）",
+      "β-カロテン（美肌）",
+      "カリウム（むくみ対策）",
+      "ビタミンE（美容）"
+    ],
+    "pairings": [
+      "鶏むね肉",
+      "エビ",
+      "ブロッコリー",
+      "ミニトマト"
+    ],
+    "recommendedSauces": [
+      "レモン塩",
+      "柚子胡椒ポン酢",
+      "塩麹"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "memo": "ビタミンCやβ-カロテンを含む、彩りのよい野菜。蒸しすぎると食感が弱くなるため、短時間で仕上げるのがおすすめです。",
+    "zukanNote": "ビタミンCやβ-カロテンを含む、彩りのよい野菜。蒸しすぎると食感が弱くなるため、短時間で仕上げるのがおすすめです。",
+    "steamTime": "5〜7分",
+    "sourceMemo": "日本食品標準成分表の赤ピーマン類を参考に、ビタミンC・β-カロテン・ビタミンEを採用。",
+    "nutritionNames": [
+      "ビタミンC",
+      "β-カロテン",
+      "カリウム",
+      "ビタミンE"
+    ],
+    "nutritionSummary": "美容・透明感・美肌・むくみ対策におすすめ"
+  },
+  {
+    "name": "パプリカ黄",
+    "category": "野菜",
+    "season": "夏",
+    "beautyMain": "透明感",
+    "beautySub": "美肌",
+    "yakuzenMain": "体調管理",
+    "yakuzenSub": "夏バテ対策",
+    "nutrition": [
+      {
+        "name": "ビタミンC",
+        "benefit": "美容・透明感"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      },
+      {
+        "name": "ビタミンE",
+        "benefit": "美容"
+      }
+    ],
+    "nutritionPoints": [
+      "ビタミンC（美容・透明感）",
+      "カリウム（むくみ対策）",
+      "食物繊維（腸活）",
+      "ビタミンE（美容）"
+    ],
+    "pairings": [
+      "鶏むね肉",
+      "エビ",
+      "チンゲンサイ",
+      "ミニトマト"
+    ],
+    "recommendedSauces": [
+      "レモン塩",
+      "ゆずポン酢",
+      "塩麹"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "memo": "明るい色味で、せいろ蒸しの見た目を華やかにしてくれる野菜。赤パプリカよりβ-カロテンは控えめですが、ビタミンCを取り入れやすい食材です。",
+    "zukanNote": "明るい色味で、せいろ蒸しの見た目を華やかにしてくれる野菜。赤パプリカよりβ-カロテンは控えめですが、ビタミンCを取り入れやすい食材です。",
+    "steamTime": "5〜7分",
+    "sourceMemo": "日本食品標準成分表の黄ピーマン類を参考に、ビタミンC・カリウム・食物繊維を採用。",
+    "nutritionNames": [
+      "ビタミンC",
+      "カリウム",
+      "食物繊維",
+      "ビタミンE"
+    ],
+    "nutritionSummary": "美容・透明感・むくみ対策・腸活におすすめ"
+  },
+  {
+    "name": "ズッキーニ",
+    "category": "野菜",
+    "season": "夏",
+    "beautyMain": "ダイエット",
+    "beautySub": "むくみ対策",
+    "yakuzenMain": "夏バテ対策",
+    "yakuzenSub": "むくみ対策",
+    "nutrition": [
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "β-カロテン",
+        "benefit": "美肌"
+      },
+      {
+        "name": "ビタミンC",
+        "benefit": "美容"
+      },
+      {
+        "name": "低カロリー",
+        "benefit": "軽め"
+      }
+    ],
+    "nutritionPoints": [
+      "カリウム（むくみ対策）",
+      "β-カロテン（美肌）",
+      "ビタミンC（美容）",
+      "低カロリー（軽め）"
+    ],
+    "pairings": [
+      "鶏むね肉",
+      "鮭",
+      "ミニトマト",
+      "エリンギ"
+    ],
+    "recommendedSauces": [
+      "レモン塩",
+      "大葉ポン酢",
+      "柚子胡椒ポン酢"
+    ],
+    "property": "涼性",
+    "taste": "甘",
+    "memo": "軽めでかさ増ししやすい夏野菜。蒸すとやわらかくなり、魚や鶏肉と合わせるとさっぱり食べられます。",
+    "zukanNote": "軽めでかさ増ししやすい夏野菜。蒸すとやわらかくなり、魚や鶏肉と合わせるとさっぱり食べられます。",
+    "steamTime": "6〜8分",
+    "sourceMemo": "日本食品標準成分表のズッキーニ果実・生を参考に、カリウム・β-カロテン・ビタミンCを採用。",
+    "nutritionNames": [
+      "カリウム",
+      "β-カロテン",
+      "ビタミンC",
+      "低カロリー"
+    ],
+    "nutritionSummary": "むくみ対策・美肌・美容・ダイエットにおすすめ"
+  },
+  {
+    "name": "くるみ",
+    "category": "炭水化物",
+    "season": "通年",
+    "beautyMain": "美肌",
+    "beautySub": "疲労回復",
+    "yakuzenMain": "巡りケア",
+    "yakuzenSub": "疲労回復",
+    "nutrition": [
+      {
+        "name": "良質な脂質",
+        "benefit": "美容"
+      },
+      {
+        "name": "ビタミンE",
+        "benefit": "美容"
+      },
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      },
+      {
+        "name": "マグネシウム",
+        "benefit": "体づくり"
+      },
+      {
+        "name": "オメガ3脂肪酸",
+        "benefit": "良質な脂質"
+      }
+    ],
+    "nutritionPoints": [
+      "良質な脂質（美容）",
+      "ビタミンE（美容）",
+      "食物繊維（腸活）",
+      "マグネシウム（体づくり）",
+      "オメガ3脂肪酸（良質な脂質）"
+    ],
+    "pairings": [
+      "かぼちゃ",
+      "さつまいも",
+      "チーズ",
+      "ブロッコリー"
+    ],
+    "recommendedSauces": [
+      "ごまだれ",
+      "バター醤油",
+      "塩麹"
+    ],
+    "property": "温性",
+    "taste": "甘",
+    "memo": "香ばしい食感がアクセントになるトッピング食材。蒸し上がりに砕いてかけると、かぼちゃやさつまいも、チーズとよく合います。",
+    "zukanNote": "香ばしい食感がアクセントになるトッピング食材。蒸し上がりに砕いてかけると、かぼちゃやさつまいも、チーズとよく合います。",
+    "steamTime": "仕上げにトッピング",
+    "sourceMemo": "日本食品標準成分表の種実類・くるみを参考に、脂質・ビタミンE・マグネシウムを採用。",
+    "nutritionNames": [
+      "良質な脂質",
+      "ビタミンE",
+      "食物繊維",
+      "マグネシウム",
+      "オメガ3脂肪酸"
+    ],
+    "nutritionSummary": "美容・腸活・体づくり・良質な脂質におすすめ"
+  },
+  {
+    "name": "なす",
+    "category": "野菜",
+    "season": "夏",
+    "beautyMain": "美肌",
+    "beautySub": "むくみ対策",
+    "yakuzenMain": "夏バテ対策",
+    "yakuzenSub": "巡りケア",
+    "nutrition": [
+      {
+        "name": "ナスニン",
+        "benefit": "美容"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      },
+      {
+        "name": "低カロリー",
+        "benefit": "軽め"
+      }
+    ],
+    "nutritionPoints": [
+      "ナスニン（美容）",
+      "カリウム（むくみ対策）",
+      "食物繊維（腸活）",
+      "低カロリー（軽め）"
+    ],
+    "pairings": [
+      "豚しゃぶ肉",
+      "鶏もも肉",
+      "ミニトマト",
+      "エリンギ"
+    ],
+    "recommendedSauces": [
+      "大葉ポン酢",
+      "柚子胡椒ポン酢",
+      "味噌だれ"
+    ],
+    "property": "涼性",
+    "taste": "甘",
+    "memo": "蒸すととろっとやわらかくなり、油を使わなくても満足感が出やすい夏野菜。薬膳では体の熱を冷ます食材として扱われることが多く、暑い日のせいろ蒸しに向きます。",
+    "zukanNote": "蒸すととろっとやわらかくなり、油を使わなくても満足感が出やすい夏野菜。薬膳では体の熱を冷ます食材として扱われることが多く、暑い日のせいろ蒸しに向きます。",
+    "steamTime": "8〜10分",
+    "sourceMemo": "日本食品標準成分表のなす果実・生を参考に、カリウム・食物繊維を中心に整理。紫色の色素成分ナスニンも美容ポイントとして採用。",
+    "nutritionNames": [
+      "ナスニン",
+      "カリウム",
+      "食物繊維",
+      "低カロリー"
+    ],
+    "nutritionSummary": "美容・むくみ対策・腸活・美肌におすすめ"
+  },
+  {
+    "name": "とうもろこし",
+    "category": "野菜",
+    "season": "夏",
+    "beautyMain": "疲労回復",
+    "beautySub": "腸活",
+    "yakuzenMain": "夏バテ対策",
+    "yakuzenSub": "疲労回復",
+    "nutrition": [
+      {
+        "name": "炭水化物",
+        "benefit": "満足感"
+      },
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      },
+      {
+        "name": "ビタミンB1",
+        "benefit": "疲労回復"
+      },
+      {
+        "name": "葉酸",
+        "benefit": "体づくり"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      }
+    ],
+    "nutritionPoints": [
+      "炭水化物（満足感）",
+      "食物繊維（腸活）",
+      "ビタミンB1（疲労回復）",
+      "葉酸（体づくり）",
+      "カリウム（むくみ対策）"
+    ],
+    "pairings": [
+      "鶏むね肉",
+      "鮭",
+      "じゃがいも",
+      "ブロッコリー"
+    ],
+    "recommendedSauces": [
+      "バター醤油",
+      "塩麹",
+      "レモン塩"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "memo": "甘みがあり、せいろ蒸しの満足感を上げてくれる夏食材。薬膳では胃腸を助け、気を補う食材として扱われることがあります。",
+    "zukanNote": "甘みがあり、せいろ蒸しの満足感を上げてくれる夏食材。薬膳では胃腸を助け、気を補う食材として扱われることがあります。",
+    "steamTime": "10〜12分",
+    "sourceMemo": "日本食品標準成分表のとうもろこし類を参考に、炭水化物・食物繊維・ビタミンB1・葉酸を採用。",
+    "nutritionNames": [
+      "炭水化物",
+      "食物繊維",
+      "ビタミンB1",
+      "葉酸",
+      "カリウム"
+    ],
+    "nutritionSummary": "満足感・腸活・疲労回復・体づくりにおすすめ"
+  },
+  {
+    "name": "枝豆",
+    "category": "野菜",
+    "season": "夏",
+    "beautyMain": "ダイエット",
+    "beautySub": "疲労回復",
+    "yakuzenMain": "疲労回復",
+    "yakuzenSub": "夏バテ対策",
+    "nutrition": [
+      {
+        "name": "植物性たんぱく質",
+        "benefit": "体づくり"
+      },
+      {
+        "name": "葉酸",
+        "benefit": "体づくり"
+      },
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "ビタミンB1",
+        "benefit": "疲労回復"
+      }
+    ],
+    "nutritionPoints": [
+      "植物性たんぱく質（体づくり）",
+      "葉酸（体づくり）",
+      "食物繊維（腸活）",
+      "カリウム（むくみ対策）",
+      "ビタミンB1（疲労回復）"
+    ],
+    "pairings": [
+      "エビ",
+      "ミニトマト",
+      "とうもろこし",
+      "鶏むね肉"
+    ],
+    "recommendedSauces": [
+      "レモン塩",
+      "塩麹",
+      "ゆずポン酢"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "memo": "豆と野菜の両方の良さがあり、たんぱく質感と彩りを足せる夏食材。少量でも満足感が出やすく、軽めのせいろに合います。",
+    "zukanNote": "豆と野菜の両方の良さがあり、たんぱく質感と彩りを足せる夏食材。少量でも満足感が出やすく、軽めのせいろに合います。",
+    "steamTime": "8〜10分",
+    "sourceMemo": "日本食品標準成分表のえだまめ類を参考に、植物性たんぱく質・葉酸・食物繊維を採用。",
+    "nutritionNames": [
+      "植物性たんぱく質",
+      "葉酸",
+      "食物繊維",
+      "カリウム",
+      "ビタミンB1"
+    ],
+    "nutritionSummary": "体づくり・腸活・むくみ対策・疲労回復におすすめ"
+  },
+  {
+    "name": "かぶ",
+    "category": "野菜",
+    "season": "秋",
+    "beautyMain": "むくみ対策",
+    "beautySub": "腸活",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "むくみ対策",
+    "nutrition": [
+      {
+        "name": "ビタミンC",
+        "benefit": "美容"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      },
+      {
+        "name": "葉酸",
+        "benefit": "体づくり"
+      }
+    ],
+    "nutritionPoints": [
+      "ビタミンC（美容）",
+      "カリウム（むくみ対策）",
+      "食物繊維（腸活）",
+      "葉酸（体づくり）"
+    ],
+    "pairings": [
+      "鶏もも肉",
+      "豆腐",
+      "しめじ",
+      "鮭"
+    ],
+    "recommendedSauces": [
+      "生姜ポン酢",
+      "ポン酢",
+      "塩麹"
+    ],
+    "property": "温性",
+    "taste": "甘・辛",
+    "memo": "蒸すとやわらかく甘みが出る根菜。薬膳では胃腸を整える食材として扱われることが多く、やさしいせいろ蒸しに向きます。",
+    "zukanNote": "蒸すとやわらかく甘みが出る根菜。薬膳では胃腸を整える食材として扱われることが多く、やさしいせいろ蒸しに向きます。",
+    "steamTime": "10〜12分",
+    "sourceMemo": "日本食品標準成分表のかぶ根・生を参考に、ビタミンC・カリウム・食物繊維を採用。",
+    "nutritionNames": [
+      "ビタミンC",
+      "カリウム",
+      "食物繊維",
+      "葉酸"
+    ],
+    "nutritionSummary": "美容・むくみ対策・腸活・体づくりにおすすめ"
+  },
+  {
+    "name": "里芋",
+    "category": "炭水化物",
+    "season": "秋",
+    "beautyMain": "腸活",
+    "beautySub": "むくみ対策",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "むくみ対策",
+    "nutrition": [
+      {
+        "name": "炭水化物",
+        "benefit": "満足感"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      },
+      {
+        "name": "水溶性食物繊維",
+        "benefit": "胃腸ケア"
+      }
+    ],
+    "nutritionPoints": [
+      "炭水化物（満足感）",
+      "カリウム（むくみ対策）",
+      "食物繊維（腸活）",
+      "水溶性食物繊維（胃腸ケア）"
+    ],
+    "pairings": [
+      "鶏もも肉",
+      "しめじ",
+      "厚揚げ",
+      "長ねぎ"
+    ],
+    "recommendedSauces": [
+      "味噌だれ",
+      "生姜ポン酢",
+      "柚子胡椒ポン酢"
+    ],
+    "property": "平性",
+    "taste": "甘・辛",
+    "memo": "ねっとりした食感で満足感が出やすい秋冬向きの食材。薬膳では胃腸を補い、体を整える食材として扱われることがあります。",
+    "zukanNote": "ねっとりした食感で満足感が出やすい秋冬向きの食材。薬膳では胃腸を補い、体を整える食材として扱われることがあります。",
+    "steamTime": "15〜18分",
+    "sourceMemo": "日本食品標準成分表のさといも球茎・生を参考に、カリウム・炭水化物・食物繊維を採用。",
+    "nutritionNames": [
+      "炭水化物",
+      "カリウム",
+      "食物繊維",
+      "水溶性食物繊維"
+    ],
+    "nutritionSummary": "満足感・むくみ対策・腸活・胃腸ケアにおすすめ"
+  },
+  {
+    "name": "レタス",
+    "category": "野菜",
+    "season": "通年",
+    "beautyMain": "ダイエット",
+    "beautySub": "むくみ対策",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "ストレスケア",
+    "nutrition": [
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      },
+      {
+        "name": "葉酸",
+        "benefit": "体づくり"
+      },
+      {
+        "name": "低カロリー",
+        "benefit": "軽め"
+      }
+    ],
+    "nutritionPoints": [
+      "カリウム（むくみ対策）",
+      "食物繊維（腸活）",
+      "葉酸（体づくり）",
+      "低カロリー（軽め）"
+    ],
+    "pairings": [
+      "豚しゃぶ肉",
+      "鶏むね肉",
+      "豆腐",
+      "えのき"
+    ],
+    "recommendedSauces": [
+      "ポン酢",
+      "大葉ポン酢",
+      "ごまだれ"
+    ],
+    "property": "涼性",
+    "taste": "甘・苦",
+    "memo": "さっと蒸すとしんなりして、肉や豆腐を包むように食べやすい葉物。長く蒸すと食感がなくなるため、仕上げに短時間がおすすめです。",
+    "zukanNote": "さっと蒸すとしんなりして、肉や豆腐を包むように食べやすい葉物。長く蒸すと食感がなくなるため、仕上げに短時間がおすすめです。",
+    "steamTime": "2〜4分",
+    "sourceMemo": "日本食品標準成分表のレタス類を参考に、カリウム・食物繊維・葉酸を採用。薬膳では涼性寄りとして扱われることがあります。",
+    "nutritionNames": [
+      "カリウム",
+      "食物繊維",
+      "葉酸",
+      "低カロリー"
+    ],
+    "nutritionSummary": "むくみ対策・腸活・体づくり・ダイエットにおすすめ"
+  },
+  {
+    "name": "ニラ",
+    "category": "野菜",
+    "season": "春",
+    "beautyMain": "冷え対策",
+    "beautySub": "疲労回復",
+    "yakuzenMain": "冷え対策",
+    "yakuzenSub": "疲労回復",
+    "nutrition": [
+      {
+        "name": "β-カロテン",
+        "benefit": "美肌"
+      },
+      {
+        "name": "ビタミンC",
+        "benefit": "体調管理"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "香り成分",
+        "benefit": "巡り・疲労回復"
+      }
+    ],
+    "nutritionPoints": [
+      "β-カロテン（美肌）",
+      "ビタミンC（体調管理）",
+      "カリウム（むくみ対策）",
+      "香り成分（巡り・疲労回復）"
+    ],
+    "pairings": [
+      "豚しゃぶ肉",
+      "卵",
+      "豆腐",
+      "もやし"
+    ],
+    "recommendedSauces": [
+      "ラー油ポン酢",
+      "生姜ポン酢",
+      "にんにく醤油"
+    ],
+    "property": "温性",
+    "taste": "辛",
+    "memo": "香りがあり、少量でもせいろ蒸しにアクセントを足せる野菜。薬膳では温性の食材として扱われることが多く、冷えが気になる日に向きます。",
+    "zukanNote": "香りがあり、少量でもせいろ蒸しにアクセントを足せる野菜。薬膳では温性の食材として扱われることが多く、冷えが気になる日に向きます。",
+    "steamTime": "3〜5分",
+    "sourceMemo": "日本食品標準成分表のにら葉・生を参考に、β-カロテン・ビタミンC・カリウムを採用。香り成分は食養生上の特徴として整理。",
+    "nutritionNames": [
+      "β-カロテン",
+      "ビタミンC",
+      "カリウム",
+      "香り成分"
+    ],
+    "nutritionSummary": "美肌・体調管理・むくみ対策・巡りにおすすめ"
+  },
+  {
+    "name": "ピーマン",
+    "category": "野菜",
+    "season": "夏",
+    "beautyMain": "透明感",
+    "beautySub": "疲労回復",
+    "yakuzenMain": "夏バテ対策",
+    "yakuzenSub": "巡りケア",
+    "nutrition": [
+      {
+        "name": "ビタミンC",
+        "benefit": "美容・透明感"
+      },
+      {
+        "name": "β-カロテン",
+        "benefit": "美肌"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      }
+    ],
+    "nutritionPoints": [
+      "ビタミンC（美容・透明感）",
+      "β-カロテン（美肌）",
+      "カリウム（むくみ対策）",
+      "食物繊維（腸活）"
+    ],
+    "pairings": [
+      "豚しゃぶ肉",
+      "鶏むね肉",
+      "エリンギ",
+      "玉ねぎ"
+    ],
+    "recommendedSauces": [
+      "柚子胡椒ポン酢",
+      "レモン塩",
+      "味噌だれ"
+    ],
+    "property": "温性",
+    "taste": "辛・甘",
+    "memo": "短時間で火が通り、ほろ苦さがアクセントになる夏野菜。肉やきのこと合わせると、軽めでも食べ応えのあるせいろになります。",
+    "zukanNote": "短時間で火が通り、ほろ苦さがアクセントになる夏野菜。肉やきのこと合わせると、軽めでも食べ応えのあるせいろになります。",
+    "steamTime": "5〜7分",
+    "sourceMemo": "日本食品標準成分表のピーマン類を参考に、ビタミンC・β-カロテン・カリウムを採用。",
+    "nutritionNames": [
+      "ビタミンC",
+      "β-カロテン",
+      "カリウム",
+      "食物繊維"
+    ],
+    "nutritionSummary": "美容・透明感・美肌・むくみ対策におすすめ"
+  },
+  {
+    "name": "カリフラワー",
+    "category": "野菜",
+    "season": "冬",
+    "beautyMain": "ダイエット",
+    "beautySub": "腸活",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "体調管理",
+    "nutrition": [
+      {
+        "name": "ビタミンC",
+        "benefit": "美容・透明感"
+      },
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      },
+      {
+        "name": "低カロリー",
+        "benefit": "軽め"
+      }
+    ],
+    "nutritionPoints": [
+      "ビタミンC（美容・透明感）",
+      "食物繊維（腸活）",
+      "カリウム（むくみ対策）",
+      "低カロリー（軽め）"
+    ],
+    "pairings": [
+      "鶏むね肉",
+      "エビ",
+      "鮭",
+      "ミニトマト"
+    ],
+    "recommendedSauces": [
+      "レモン塩",
+      "塩麹",
+      "柚子胡椒ポン酢"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "memo": "ブロッコリーより淡白で、たれの味を受け止めやすい野菜。軽めにかさ増ししたい日や、白い彩りを入れたい時に便利です。",
+    "zukanNote": "ブロッコリーより淡白で、たれの味を受け止めやすい野菜。軽めにかさ増ししたい日や、白い彩りを入れたい時に便利です。",
+    "steamTime": "8〜10分",
+    "sourceMemo": "日本食品標準成分表のカリフラワー花序・生を参考に、ビタミンC・食物繊維・カリウムを採用。",
+    "nutritionNames": [
+      "ビタミンC",
+      "食物繊維",
+      "カリウム",
+      "低カロリー"
+    ],
+    "nutritionSummary": "美容・透明感・腸活・むくみ対策におすすめ"
+  },
+  {
+    "name": "春菊",
+    "category": "野菜",
+    "season": "秋",
+    "beautyMain": "美肌",
+    "beautySub": "透明感",
+    "yakuzenMain": "ストレスケア",
+    "yakuzenSub": "巡りケア",
+    "nutrition": [
+      {
+        "name": "β-カロテン",
+        "benefit": "美肌"
+      },
+      {
+        "name": "カルシウム",
+        "benefit": "骨・体づくり"
+      },
+      {
+        "name": "鉄",
+        "benefit": "巡り"
+      },
+      {
+        "name": "香り成分",
+        "benefit": "気分転換"
+      },
+      {
+        "name": "食物繊維",
+        "benefit": "腸活"
+      }
+    ],
+    "nutritionPoints": [
+      "β-カロテン（美肌）",
+      "カルシウム（骨・体づくり）",
+      "鉄（巡り）",
+      "香り成分（気分転換）",
+      "食物繊維（腸活）"
+    ],
+    "pairings": [
+      "豆腐",
+      "豚しゃぶ肉",
+      "しめじ",
+      "鮭"
+    ],
+    "recommendedSauces": [
+      "ポン酢",
+      "ごまだれ",
+      "生姜ポン酢"
+    ],
+    "property": "温性",
+    "taste": "辛・甘",
+    "memo": "香りが強く、少量でせいろ蒸しの雰囲気を変えられる葉物。薬膳では気の巡りを整える食材として扱われることがあります。",
+    "zukanNote": "香りが強く、少量でせいろ蒸しの雰囲気を変えられる葉物。薬膳では気の巡りを整える食材として扱われることがあります。",
+    "steamTime": "4〜6分",
+    "sourceMemo": "日本食品標準成分表のしゅんぎく葉・生を参考に、β-カロテン・カルシウム・鉄を採用。香り成分は薬膳的な特徴として整理。",
+    "nutritionNames": [
+      "β-カロテン",
+      "カルシウム",
+      "鉄",
+      "香り成分",
+      "食物繊維"
+    ],
+    "nutritionSummary": "美肌・骨・体づくり・巡りにおすすめ"
+  },
+  {
+    "name": "タラ",
+    "category": "タンパク質",
+    "season": "冬",
+    "beautyMain": "ダイエット",
+    "beautySub": "二日酔い",
+    "yakuzenMain": "胃腸ケア",
+    "yakuzenSub": "二日酔い",
+    "nutrition": [
+      {
+        "name": "たんぱく質",
+        "benefit": "体づくり"
+      },
+      {
+        "name": "低脂質",
+        "benefit": "軽め"
+      },
+      {
+        "name": "ビタミンB12",
+        "benefit": "巡り"
+      },
+      {
+        "name": "カリウム",
+        "benefit": "むくみ対策"
+      }
+    ],
+    "nutritionPoints": [
+      "たんぱく質（体づくり）",
+      "低脂質（軽め）",
+      "ビタミンB12（巡り）",
+      "カリウム（むくみ対策）"
+    ],
+    "pairings": [
+      "白菜",
+      "豆腐",
+      "長ねぎ",
+      "しめじ"
+    ],
+    "recommendedSauces": [
+      "生姜ポン酢",
+      "柚子胡椒ポン酢",
+      "塩麹"
+    ],
+    "property": "平性",
+    "taste": "甘",
+    "memo": "低脂質であっさりした白身魚。白菜や豆腐と合わせると、重たくない冬のせいろ蒸しになります。",
+    "zukanNote": "低脂質であっさりした白身魚。白菜や豆腐と合わせると、重たくない冬のせいろ蒸しになります。",
+    "steamTime": "8〜10分",
+    "sourceMemo": "日本食品標準成分表のたら類を参考に、たんぱく質・低脂質・ビタミンB12を採用。薬膳では胃腸にやさしい白身魚として扱います。",
+    "nutritionNames": [
+      "たんぱく質",
+      "低脂質",
+      "ビタミンB12",
+      "カリウム"
+    ],
+    "nutritionSummary": "体づくり・巡り・むくみ対策・ダイエットにおすすめ"
+  },
+  {
+    "name": "ぶり",
+    "category": "タンパク質",
+    "season": "冬",
+    "beautyMain": "疲労回復",
+    "beautySub": "冷え対策",
+    "yakuzenMain": "冷え対策",
+    "yakuzenSub": "疲労回復",
+    "nutrition": [
+      {
+        "name": "たんぱく質",
+        "benefit": "体づくり"
+      },
+      {
+        "name": "DHA・EPA",
+        "benefit": "良質な脂質"
+      },
+      {
+        "name": "ビタミンD",
+        "benefit": "体調管理"
+      },
+      {
+        "name": "ビタミンB群",
+        "benefit": "疲労回復"
+      }
+    ],
+    "nutritionPoints": [
+      "たんぱく質（体づくり）",
+      "DHA・EPA（良質な脂質）",
+      "ビタミンD（体調管理）",
+      "ビタミンB群（疲労回復）"
+    ],
+    "pairings": [
+      "大根",
+      "長ねぎ",
+      "白菜",
+      "しめじ"
+    ],
+    "recommendedSauces": [
+      "柚子胡椒ポン酢",
+      "生姜ポン酢",
+      "味噌だれ"
+    ],
+    "property": "温性",
+    "taste": "甘",
+    "memo": "脂がのった冬の魚で、少量でも満足感が出やすい食材。大根や長ねぎと合わせると、さっぱりしつつ食べ応えのあるせいろになります。",
+    "zukanNote": "脂がのった冬の魚で、少量でも満足感が出やすい食材。大根や長ねぎと合わせると、さっぱりしつつ食べ応えのあるせいろになります。",
+    "steamTime": "10〜12分",
+    "sourceMemo": "日本食品標準成分表のぶり類を参考に、たんぱく質・脂質・ビタミンD・ビタミンB群を採用。薬膳では温める魚として扱われることがあります。",
+    "nutritionNames": [
+      "たんぱく質",
+      "DHA・EPA",
+      "ビタミンD",
+      "ビタミンB群"
+    ],
+    "nutritionSummary": "体づくり・良質な脂質・体調管理・疲労回復におすすめ"
+  },
+  {
+    "name": "サバ",
+    "category": "タンパク質",
+    "season": "秋",
+    "beautyMain": "美肌",
+    "beautySub": "肌荒れケア",
+    "yakuzenMain": "巡りケア",
+    "yakuzenSub": "疲労回復",
+    "nutrition": [
+      {
+        "name": "たんぱく質",
+        "benefit": "体づくり"
+      },
+      {
+        "name": "DHA・EPA",
+        "benefit": "良質な脂質"
+      },
+      {
+        "name": "ビタミンD",
+        "benefit": "体調管理"
+      },
+      {
+        "name": "ビタミンB12",
+        "benefit": "巡り"
+      }
+    ],
+    "nutritionPoints": [
+      "たんぱく質（体づくり）",
+      "DHA・EPA（良質な脂質）",
+      "ビタミンD（体調管理）",
+      "ビタミンB12（巡り）"
+    ],
+    "pairings": [
+      "大根",
+      "キャベツ",
+      "しめじ",
+      "長ねぎ"
+    ],
+    "recommendedSauces": [
+      "柚子胡椒ポン酢",
+      "生姜ポン酢",
+      "レモン塩"
+    ],
+    "property": "温性",
+    "taste": "甘",
+    "memo": "良質な脂質を含む青魚。香りが出やすいので、長ねぎや大根、柚子胡椒ポン酢などさっぱりした組み合わせがおすすめです。",
+    "zukanNote": "良質な脂質を含む青魚。香りが出やすいので、長ねぎや大根、柚子胡椒ポン酢などさっぱりした組み合わせがおすすめです。",
+    "steamTime": "10〜12分",
+    "sourceMemo": "日本食品標準成分表のさば類を参考に、DHA・EPA、ビタミンD、ビタミンB12を代表栄養素として整理。",
+    "nutritionNames": [
+      "たんぱく質",
+      "DHA・EPA",
+      "ビタミンD",
+      "ビタミンB12"
+    ],
+    "nutritionSummary": "体づくり・良質な脂質・体調管理・巡りにおすすめ"
+  },
+  {
+    "name": "イカ",
+    "category": "タンパク質",
+    "season": "通年",
+    "beautyMain": "ダイエット",
+    "beautySub": "疲労回復",
+    "yakuzenMain": "疲労回復",
+    "yakuzenSub": "夏バテ対策",
+    "nutrition": [
+      {
+        "name": "たんぱく質",
+        "benefit": "体づくり"
+      },
+      {
+        "name": "低脂質",
+        "benefit": "軽め"
+      },
+      {
+        "name": "タウリン",
+        "benefit": "疲労回復"
+      },
+      {
+        "name": "ビタミンB12",
+        "benefit": "巡り"
+      }
+    ],
+    "nutritionPoints": [
+      "たんぱく質（体づくり）",
+      "低脂質（軽め）",
+      "タウリン（疲労回復）",
+      "ビタミンB12（巡り）"
+    ],
+    "pairings": [
+      "ブロッコリー",
+      "ズッキーニ",
+      "ミニトマト",
+      "チンゲンサイ"
+    ],
+    "recommendedSauces": [
+      "レモン塩",
+      "柚子胡椒",
+      "大葉ポン酢"
+    ],
+    "property": "平性",
+    "taste": "甘・鹹",
+    "memo": "低脂質でさっぱり食べやすく、噛みごたえで満足感も出る魚介。火を入れすぎると固くなりやすいので短時間がおすすめです。",
+    "zukanNote": "低脂質でさっぱり食べやすく、噛みごたえで満足感も出る魚介。火を入れすぎると固くなりやすいので短時間がおすすめです。",
+    "steamTime": "5〜7分",
+    "sourceMemo": "日本食品標準成分表のいか類を参考に、たんぱく質・低脂質・タウリンを採用。",
+    "nutritionNames": [
+      "たんぱく質",
+      "低脂質",
+      "タウリン",
+      "ビタミンB12"
+    ],
+    "nutritionSummary": "体づくり・疲労回復・巡り・ダイエットにおすすめ"
   }
-  if(!sauces.length){
-    sauces=SAUCES;
+];
+
+const SAUCES = [
+  {
+    "name": "生姜ポン酢",
+    "type": "さっぱり",
+    "modes": [
+      "beauty",
+      "yakuzen"
+    ],
+    "goals": [
+      "冷え対策",
+      "胃腸ケア",
+      "疲労回復",
+      "二日酔い"
+    ],
+    "memo": "生姜の香りでさっぱり。冷えが気になる日や胃腸をやさしく整えたい日に。",
+    "recipe": "ポン酢 大さじ2＋おろし生姜 小さじ1"
+  },
+  {
+    "name": "柚子胡椒",
+    "type": "ピリ辛",
+    "modes": [
+      "beauty",
+      "yakuzen"
+    ],
+    "goals": [
+      "冷え対策",
+      "夏バテ対策",
+      "疲労回復",
+      "ダイエット"
+    ],
+    "memo": "ピリッとした辛みで味が引き締まります。鶏肉・豚肉・魚・ブロッコリーと相性抜群。",
+    "recipe": "少量をそのまま添える。ポン酢に溶いても◎"
+  },
+  {
+    "name": "柚子胡椒ポン酢",
+    "type": "ピリ辛",
+    "modes": [
+      "beauty",
+      "yakuzen"
+    ],
+    "goals": [
+      "冷え対策",
+      "夏バテ対策",
+      "二日酔い",
+      "むくみ対策"
+    ],
+    "memo": "さっぱりしつつ風味を足せる万能だれ。野菜多めの日にもおすすめ。",
+    "recipe": "ポン酢 大さじ2＋柚子胡椒 少量"
+  },
+  {
+    "name": "ポン酢",
+    "type": "さっぱり",
+    "modes": [
+      "beauty",
+      "yakuzen"
+    ],
+    "goals": [
+      "ダイエット",
+      "二日酔い",
+      "むくみ対策",
+      "胃腸ケア"
+    ],
+    "memo": "軽めに食べたい日や、魚・豆腐・野菜をさっぱり食べたい日に。",
+    "recipe": "そのまま。大根おろしを足しても◎"
+  },
+  {
+    "name": "大葉ポン酢",
+    "type": "香味",
+    "modes": [
+      "beauty",
+      "yakuzen"
+    ],
+    "goals": [
+      "透明感",
+      "二日酔い",
+      "ストレスケア",
+      "夏バテ対策"
+    ],
+    "memo": "大葉の香りでさっぱり。食欲がない日にも食べやすい組み合わせ。",
+    "recipe": "ポン酢 大さじ2＋刻み大葉 2〜3枚"
+  },
+  {
+    "name": "レモン塩",
+    "type": "さっぱり",
+    "modes": [
+      "beauty",
+      "yakuzen"
+    ],
+    "goals": [
+      "透明感",
+      "夏バテ対策",
+      "むくみ対策",
+      "ダイエット"
+    ],
+    "memo": "爽やかに食べたい日に。鶏肉・魚・ブロッコリーと相性◎。",
+    "recipe": "レモン汁 小さじ2＋塩 少々＋オリーブオイル少々"
+  },
+  {
+    "name": "ゆずポン酢",
+    "type": "さっぱり",
+    "modes": [
+      "beauty",
+      "yakuzen"
+    ],
+    "goals": [
+      "むくみ対策",
+      "二日酔い",
+      "夏バテ対策",
+      "透明感"
+    ],
+    "memo": "香りがよく、野菜も魚もさっぱり食べられます。",
+    "recipe": "市販のゆずポン酢でOK"
+  },
+  {
+    "name": "ごまだれ",
+    "type": "コク",
+    "modes": [
+      "beauty"
+    ],
+    "goals": [
+      "美肌",
+      "腸活",
+      "疲労回復",
+      "おまかせ"
+    ],
+    "memo": "コクがあり満足感を出したい日に。根菜や鶏肉、豚肉と相性がいいです。",
+    "recipe": "市販ごまだれでOK。すりごま追加も◎"
+  },
+  {
+    "name": "塩麹",
+    "type": "やさしい",
+    "modes": [
+      "beauty",
+      "yakuzen"
+    ],
+    "goals": [
+      "美肌",
+      "肌荒れケア",
+      "胃腸ケア",
+      "疲労回復"
+    ],
+    "memo": "素材の甘みを引き立てるやさしい味。鶏肉・魚・野菜に合います。",
+    "recipe": "塩麹 小さじ1〜2を添える"
+  },
+  {
+    "name": "味噌だれ",
+    "type": "コク",
+    "modes": [
+      "yakuzen"
+    ],
+    "goals": [
+      "冷え対策",
+      "胃腸ケア",
+      "疲労回復",
+      "風邪予防"
+    ],
+    "memo": "体を温めたい日や、根菜・豚肉・きのこが多い日におすすめ。",
+    "recipe": "味噌 小さじ2＋みりん 小さじ1＋少量の水"
+  },
+  {
+    "name": "にんにく醤油",
+    "type": "香味",
+    "modes": [
+      "yakuzen"
+    ],
+    "goals": [
+      "冷え対策",
+      "疲労回復",
+      "巡りケア"
+    ],
+    "memo": "疲れが気になる日や、肉・きのこをしっかり食べたい日に。",
+    "recipe": "醤油 大さじ1＋すりおろしにんにく少量"
+  },
+  {
+    "name": "ラー油ポン酢",
+    "type": "ピリ辛",
+    "modes": [
+      "beauty",
+      "yakuzen"
+    ],
+    "goals": [
+      "冷え対策",
+      "夏バテ対策",
+      "ストレスケア"
+    ],
+    "memo": "ピリ辛で満足感アップ。豆腐・豚肉・もやし・白菜に合います。",
+    "recipe": "ポン酢 大さじ2＋ラー油 少々"
+  },
+  {
+    "name": "バター醤油",
+    "type": "ご褒美",
+    "modes": [
+      "beauty"
+    ],
+    "goals": [
+      "疲労回復",
+      "おまかせ"
+    ],
+    "memo": "じゃがいも・とうもろこし・きのこが出た日に嬉しいご褒美系。",
+    "recipe": "バター少量＋醤油 少々"
+  },
+  {
+    "name": "梅ポン酢",
+    "type": "さっぱり",
+    "modes": [
+      "beauty",
+      "yakuzen"
+    ],
+    "goals": [
+      "二日酔い",
+      "夏バテ対策",
+      "ダイエット"
+    ],
+    "memo": "さっぱり食べたい日や鶏ささみ・豆腐におすすめ。",
+    "recipe": "ポン酢 大さじ2＋梅肉 小さじ1"
+  },
+  {
+    "name": "からしポン酢",
+    "type": "アクセント",
+    "modes": [
+      "beauty",
+      "yakuzen"
+    ],
+    "goals": [
+      "巡りケア",
+      "春の食材"
+    ],
+    "memo": "菜の花や春野菜のほろ苦さに合う、少し大人っぽい味。",
+    "recipe": "ポン酢 大さじ2＋からし少量"
   }
-  return sample(sauces,1)[0];
-}
-
-function ingredientReview(items,mode,goal){
-  const protein=items.find(i=>i.category==="タンパク質");
-  const veg=items.find(i=>i.category==="野菜");
-  const mushroom=items.find(i=>i.category==="きのこ");
-  const carb=items.find(i=>i.category==="炭水化物");
-  const parts=[];
-
-  if(protein)parts.push(`${protein.name}でたんぱく質をプラス`);
-  if(veg)parts.push(`${veg.name}で野菜の栄養感をプラス`);
-  if(mushroom)parts.push(`${mushroom.name}でうま味と食物繊維感をプラス`);
-  if(carb)parts.push(`${carb.name}で満足感をプラス`);
-
-  const base=parts.length?parts.join("、")+"した組み合わせです。":"バランスよく食べやすい組み合わせです。";
-
-  if(mode==="yakuzen"){
-    if(goal==="おまかせ")return `${base} 薬膳バランスを意識して、温める・整える・補う食材が入るように組み合わせました。`;
-    return `${base} 今日は「${goal}」を意識して、体調に合わせやすい食材を中心に選んでいます。`;
-  }
-
-  if(goal==="おまかせ")return `${base} 迷った日でも、主菜・野菜・きのこ・満足感のある食材が入るようにしています。`;
-  return `${base} 今日は「${goal}」を意識して、無理なく取り入れやすい食材を中心に選んでいます。`;
-}
-
-function pointText(items,mode,goal,sauce){
-  const names=items.map(i=>i.name).join("、");
-  const review=ingredientReview(items,mode,goal);
-  const sauceText=sauce?` ${sauce.name}を合わせると、${sauce.memo}`:"";
-
-  if(mode==="yakuzen"){
-    return `${names}を組み合わせた、${goal==="おまかせ"?"薬膳バランス":goal}を意識したせいろです。${review}${sauceText}`;
-  }
-
-  return `${names}を組み合わせた、${goal==="おまかせ"?"バランス":goal}を意識した蒸しごはんです。${review}${sauceText}`;
-}
-
-function clearResult(){const result=document.getElementById("result");if(result)result.innerHTML=""}
-function setActiveTab(tabName){document.querySelectorAll(".tab").forEach(tab=>tab.classList.toggle("active",tab.dataset.tab===tabName))}
-
-function showModePage(mode){
-  currentMode=mode;
-  document.getElementById("beauty").classList.toggle("hidden",mode!=="beauty");
-  document.getElementById("yakuzen").classList.toggle("hidden",mode!=="yakuzen");
-  document.getElementById("zukan").classList.add("hidden");
-  document.getElementById("resultPage").classList.add("hidden");
-  clearResult();
-  setActiveTab(mode);
-}
-
-function showResultOnly(){
-  document.getElementById("beauty").classList.add("hidden");
-  document.getElementById("yakuzen").classList.add("hidden");
-  document.getElementById("zukan").classList.add("hidden");
-  document.getElementById("resultPage").classList.remove("hidden");
-}
-
-function roll(mode){
-  const goal=activeGoal(mode);
-  const seasonId=mode==="yakuzen"?"yakuzenSeason":"beautySeason";
-  const season=document.getElementById(seasonId).value;
-  const items=[
-    ...sample(pool("タンパク質",goal,season,mode),1),
-    ...sample(pool("野菜",goal,season,mode),3),
-    ...sample(pool("きのこ",goal,season,mode),1),
-    ...sample(pool("炭水化物",goal,season,mode),1)
-  ];
-  const sauce=chooseSauce(mode,goal);
-  const result=document.getElementById("result");
-  const kickerClass=mode==="yakuzen"?"kicker mode-kicker":"kicker";
-
-  result.innerHTML=`
-    <span class="${kickerClass}">${modeLabel(mode)} / ${goal}</span>
-    <h1>${resultTitle(mode,goal)}</h1>
-
-    ${items.map((item,index)=>`
-      <div class="item">
-        <div class="emoji">${rainbowEmoji(index)}</div>
-        <div>
-          <b>${item.name}</b>
-          <small>
-            ${item.category} / ${item.season}<br>
-            🩵 ${item.beautyMain}・${item.beautySub}<br>
-            🌿 ${item.yakuzenMain}・${item.yakuzenSub}<br>
-            ${item.memo}
-          </small>
-        </div>
-      </div>
-    `).join("")}
-
-    <div class="info">
-      <b>🫚 今日のおすすめ薬味・たれ</b>
-      <div class="sauce-card">
-        <b>✨ ${sauce.name}</b><br><br>
-        <small>${sauce.type} / ${sauce.memo}</small><br><br>
-        <b>🍳 作り方</b><br>
-        <small>${sauce.recipe}</small>
-      </div>
-    </div>
-
-    <div class="info">
-      <b>💡 ワンポイント</b>
-      <p>${pointText(items,mode,goal,sauce)}</p>
-    </div>
-
-    <div class="info">
-      <b>⏱ 蒸し時間の目安</b>
-      <p>${items.map(item=>`${item.name}：${item.steamTime}`).join("<br>")}</p>
-    </div>
-
-    <button class="dice" id="againBtn">← もう一回蒸す</button>
-  `;
-  document.getElementById("againBtn").addEventListener("click",()=>showModePage(mode));
-  showResultOnly();
-}
-
-function setupGoalButtons(mode){
-  const goals=goalMap(mode);
-  const boxId=mode==="yakuzen"?"yakuzenGoalButtons":"beautyGoalButtons";
-  const box=document.getElementById(boxId);
-  const selectedGoal=activeGoal(mode);
-
-  box.innerHTML=Object.keys(goals).map(goal=>`
-    <button class="goal ${goal===selectedGoal?"active":""}" data-goal="${goal}">
-      ${goal}<span>${goals[goal]}</span>
-    </button>
-  `).join("");
-
-  box.querySelectorAll(".goal").forEach(button=>{
-    button.addEventListener("click",()=>{
-      if(mode==="yakuzen")currentYakuzenGoal=button.dataset.goal;
-      else currentBeautyGoal=button.dataset.goal;
-      setupGoalButtons(mode);
-      clearResult();
-    });
-  });
-}
-
-function updateZukanFilter(){
-  const zukanMode=document.getElementById("zukanMode").value;
-  const filter=document.getElementById("filterGoal");
-  if(zukanMode==="all"){
-    filter.innerHTML=`<option value="all">すべての目的</option>`;
-    return;
-  }
-  const goals=goalMap(zukanMode);
-  filter.innerHTML=`<option value="all">すべての目的</option>${Object.keys(goals).filter(goal=>goal!=="おまかせ").map(goal=>`<option value="${goal}">${goal}</option>`).join("")}`;
-}
-
-
-
-function nutritionIcon(name) {
-  const icons = {
-    "ビタミンC": "🍋",
-    "β-カロテン": "🥕",
-    "βカロテン": "🥕",
-    "食物繊維": "🌿",
-    "水溶性食物繊維": "🌿",
-    "葉酸": "🤍",
-    "カリウム": "💧",
-    "たんぱく質": "💪",
-    "植物性たんぱく質": "🤍",
-    "カルシウム": "🥛",
-    "鉄": "❤️",
-    "亜鉛": "✨",
-    "ビタミンD": "☀️",
-    "ビタミンE": "✨",
-    "ビタミンB1": "🍄",
-    "ビタミンB6": "🍄",
-    "ビタミンB12": "🍄",
-    "ビタミンB群": "🍄",
-    "ナイアシン": "🍄",
-    "DHA・EPA": "🐟",
-    "アスタキサンチン": "🩷",
-    "リコピン": "🍅",
-    "タウリン": "🫧",
-    "マグネシウム": "🤍",
-    "良質な脂質": "🫒",
-    "オメガ3脂肪酸": "🫒",
-    "低脂質": "🫧",
-    "低カロリー": "🫧",
-    "炭水化物": "🍠",
-    "脂質": "🫧",
-    "ポリフェノール": "🫐",
-    "ナスニン": "💜",
-    "硫化アリル": "🧅",
-    "香り成分": "🌿",
-    "消化を助ける酵素": "🫧",
-    "グアニル酸": "🍄",
-    "ナトリウム": "🧂",
-    "塩分": "🧂",
-    "ビタミン類": "✨",
-    "オリゴ糖": "🌿",
-    "アスパラギン酸": "🌱",
-    "ムチン様成分": "🫧"
-  };
-  return icons[name] || "✦";
-}
-
-function formatNutritionSimple(item) {
-  const names = item.nutritionNames || (item.nutrition || []).map(n => n.name);
-  if (!names || !names.length) {
-    return `<div class="nutrition-simple">✦ 栄養ポイント準備中</div>`;
-  }
-
-  const list = names.map(name => `
-    <div class="nutrition-line">${nutritionIcon(name)} ${name}</div>
-  `).join("");
-
-  const summary = item.nutritionSummary || "毎日の食事に取り入れやすい栄養ポイントです";
-
-  return `
-    <div class="nutrition-simple">
-      ${list}
-      <div class="nutrition-summary">✨ ${summary}</div>
-    </div>
-  `;
-}
-
-
-function formatList(items){if(!items||!items.length)return "✦ なし";return items.map(v=>`✦ ${v}`).join("<br>")}
-
-function renderZukan(){
-  const zukanMode=document.getElementById("zukanMode").value;
-  const selectedGoal=document.getElementById("filterGoal").value;
-  const keyword=document.getElementById("searchInput").value.trim();
-  const zukanList=document.getElementById("zukanList");
-  let items=[...INGREDIENTS];
-
-  if(keyword)items=items.filter(item=>item.name.includes(keyword));
-  if(zukanMode!=="all"&&selectedGoal!=="all")items=items.filter(item=>matchesGoal(item,selectedGoal,zukanMode));
-
-  zukanList.innerHTML=items.map((item,index)=>`
-    <div class="item">
-      <div class="emoji">${rainbowEmoji(index)}</div>
-      <div>
-        <b>${item.name}</b>
-        <small>
-          ${item.category} / ${item.season}<br>
-          🩵 美容：${item.beautyMain}・${item.beautySub}<br>
-          🌿 薬膳：${item.yakuzenMain}・${item.yakuzenSub}<br>
-          蒸し時間：${item.steamTime}<br>
-          ${item.memo}
-        </small>
-      </div>
-    </div>
-  `).join("");
-}
-
-document.querySelectorAll(".tab").forEach(tab=>{
-  tab.addEventListener("click",()=>{
-    const tabName=tab.dataset.tab;
-    if(tabName==="beauty"||tabName==="yakuzen"){showModePage(tabName);return;}
-    setActiveTab("zukan");
-    document.getElementById("beauty").classList.add("hidden");
-    document.getElementById("yakuzen").classList.add("hidden");
-    document.getElementById("resultPage").classList.add("hidden");
-    document.getElementById("zukan").classList.remove("hidden");
-    clearResult();
-    updateZukanFilter();
-    renderZukan();
-  });
-});
-
-document.getElementById("beautyRoll").addEventListener("click",()=>roll("beauty"));
-document.getElementById("yakuzenRoll").addEventListener("click",()=>roll("yakuzen"));
-document.getElementById("beautySeason").addEventListener("change",clearResult);
-document.getElementById("yakuzenSeason").addEventListener("change",clearResult);
-document.getElementById("zukanMode").addEventListener("change",()=>{updateZukanFilter();renderZukan()});
-document.getElementById("filterGoal").addEventListener("change",renderZukan);
-document.getElementById("searchInput").addEventListener("input",renderZukan);
-
-setupGoalButtons("beauty");
-setupGoalButtons("yakuzen");
-updateZukanFilter();
-renderZukan();
-showModePage("beauty");
+];
