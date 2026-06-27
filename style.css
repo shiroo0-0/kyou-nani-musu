@@ -259,3 +259,79 @@ h1{font-size:24px;margin:12px 0;line-height:1.35}
   font-weight:900;
   line-height:1.55;
 }
+
+
+/* Ver.7 fixed zukan layout */
+.zukan-item .item-content{
+  width:100%;
+}
+
+.item-title{
+  display:block;
+  font-size:20px;
+  line-height:1.4;
+  color:#4c6880;
+  margin-bottom:4px;
+}
+
+.item-meta{
+  color:#8ca8bc;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:8px;
+}
+
+.detail{
+  margin-top:8px;
+  padding-top:8px;
+  border-top:1px dashed #dff1f9;
+  color:#8ca8bc;
+  font-size:13px;
+  line-height:1.65;
+}
+
+.detail-title{
+  display:block;
+  color:#5f8fa8;
+  font-weight:900;
+  margin-top:12px;
+  margin-bottom:4px;
+}
+
+.detail-list{
+  margin:3px 0 0;
+}
+
+.detail-text{
+  color:#8ca8bc;
+  line-height:1.75;
+}
+
+.nutrition-list{
+  margin-top:6px;
+}
+
+.nutrition-simple{
+  background:linear-gradient(135deg,#ffffff,#f3fbff);
+  border:1px solid #dff1f9;
+  border-radius:16px;
+  padding:11px 12px;
+  box-shadow:0 5px 14px rgba(168,230,255,.12);
+}
+
+.nutrition-line{
+  color:#5f8fa8;
+  font-weight:900;
+  font-size:13px;
+  line-height:1.75;
+}
+
+.nutrition-summary{
+  margin-top:8px;
+  padding-top:8px;
+  border-top:1px dashed #dff1f9;
+  color:#78a9c4;
+  font-size:12px;
+  font-weight:900;
+  line-height:1.55;
+}
